@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PREDICT'IF</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </head>
+    <body class="m-0 p-0">
+        <header>
+            <div class="navbar navbar-dark bg-dark">
+                <div class="container d-flex justify-content-between">
+                    <a class="navbar-brand d-flex align-items-center" href="./index.html"><strong>PREDICT'IF</strong></a>
+                    <div class="d-flex">
+                        <a href="./connexion.html" class="btn bg-white mr-2">Connexion</a>
+                        <a href="./inscription.html" class="btn bg-white">Inscription</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="container-fluid p-0 m-0">
+            <div class="position-relative overflow-hidden p-1 p-md-3 text-center bg-light">
+                <div class="col-md-8 p-lg-5 mx-auto my-2 bg-light text-black">
+                    <h1>Bienvenue sur PREDICT'IF</h1>
+                </div>
+            </div>
+            <div class="position-relative overflow-hidden p-1 p-md-3 text-center bg-white">
+                <div class="col-md-8 p-lg-5 mx-auto my-2 bg-white text-black">
+                    <h2>Première agence en ligne !</h2>
+                    <p>PREDICT'IF est la toute première agence de voyance en ligne en Europe. Elle a été fondée en 2020 à Lyon en France.
+Vous pouvez dès à présent faire appel à nos services, nous ferons tout le nécessaire pour assurer le meilleur service.</p>
+                    <hr/>
+                    <p>Débutez votre consultation dès maintenant.</p>
+                    
+                    <a href="#" class="btn bg-white border border-primary">Bénéficier de nos services</a>
+                </div>
+            </div>
+            <div class="container py-4">
+                
+                <h2 class="text-center">Nos médiums</h2>
+                <div id="mediums">
+                    
+                    <div class="py-3">
+                        <h3>Spirite</h3>  
+                        <div class="row" id="spirites_container">
+                        </div>
+                    </div> 
+                    
+                    <div class="py-3">
+                        <h3>Astrologue</h3>      
+                        <div class="row" id="astrologues_container">
+                        </div>
+                    </div>
+                    
+                    <div class="py-3">
+                        <h3>Cartomancien</h3>      
+                        <div class="row" id="cartomanciens_container">
+                        </div>
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </main>
+        <script>
+
+            function e(tag, parent, id, classs, value) {
+                let element = document.createElement(tag);
+                element.className = classs;
+                element.id = id;
+                element.innerHTML = value;
+                parent.appendChild(element);
+                return element;
+            }
+
+            $(document).ready( function () {
+        
+                // containers
+                let astrologues_container = document.querySelector("#astrologues_container");
+                let cartomanciens_container = document.querySelector("#cartomanciens_container");
+                let spirites_container = document.querySelector("#spirites_container");
+
+                // Appel AJAX
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'listerMediumsAccueil',
+                    },
+                    dataType: 'json'
+                })
+                .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                    
+                    console.log('Response',response); // LOG dans Console Javascript
+
+                    for (let astro of response.astrologues)
+                    {
+                        let col = e("div", astrologues_container, "", "col-xs-12 p-2 col-md-6", "");
+                        let border = e("div", col, "", "border border-dark", "");
+                        let p = e("h4", border, "", "m-2 pl-1", astro.denomination);
+                    }
+
+                    for (let carto of response.cartomanciens)
+                    {
+                        let col = e("div", cartomanciens_container, "", "col-xs-12 p-2 col-md-6", "");
+                        let border = e("div", col, "", "border border-dark", "");
+                        let p = e("h4", border, "", "m-2 pl-1", carto.denomination);
+                    }
+
+                    for (let spirite of response.spirites)
+                    {
+                        let col = e("div", spirites_container, "", "col-xs-12 p-2 col-md-6", "");
+                        let border = e("div", col, "", "border border-dark", "");
+                        let p = e("h4", border, "", "m-2 pl-1", spirite.denomination);
+                    }
+
+                })
+                .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                    console.log('Error',error); // LOG dans Console Javascript
+                    alert("Erreur lors de l'appel AJAX");
+                })
+                .always( function () { // Fonction toujours appelée
+                    
+                });
+
+            });
+        </script>
+    </body>
+</html>

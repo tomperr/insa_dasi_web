@@ -1,0 +1,101 @@
+
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PREDICT'IF - Connexion</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </head>
+    <body class="m-0 p-0">
+        <header>
+            <div class="navbar navbar-dark bg-dark">
+                <div class="container d-flex justify-content-between">
+                    <a class="navbar-brand d-flex align-items-center" href="./index.html"><strong>PREDICT'IF</strong></a>
+                    <div class="d-flex">
+                        <a href="./connexion.html" class="btn bg-white mr-2">Connexion</a>
+                        <a href="./inscription.html" class="btn bg-white">Inscription</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="container-fluid">
+            <br/>
+            <br/>
+            <div class="col-sm-10 col-12 col-md-8 col-lg-6 col-xl-4 m-auto border border-light text-center">
+                <br/>
+                <br/>
+                <h1>Connexion</h1>
+                <br/>
+                <br/>
+                <div class="form-group row justify-content-center">
+                   <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+                   <div class="col-sm-6">
+                    <input type="text" class="form-control" id="inputEmail">
+                   </div>
+                </div>
+                <div class="form-group row justify-content-center">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-6">
+                 <input type="password" class="form-control" id="inputPassword">
+                </div>
+            </div>
+            <div class="form-group row">
+                        <div class="col">
+                            <button type="submit" class="btn btn-light mr-2" id="Annuler">Annuler</button>
+                            <button type="submit" class="btn btn-primary" id="Valider">Connexion</button>
+                        </div>
+            </div>
+                    
+             <h5 id="notification"></h5>
+            </div>
+            <script>
+            $(document).ready( function () {
+                $('#Valider').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
+
+                    console.log("clic sur le bouton de connexion"); // LOG dans Console Javascript
+                 
+                    // Récupération de la valeur des champs du formulaire
+                    var login = $('#inputEmail').val();
+                    var mdp = $('#inputPassword').val();
+                    
+                    // Appel AJAX
+                    $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            todo: 'connexion',
+                            login: login,
+                            password : mdp
+                        },
+                        dataType: 'json'
+                    })
+                    .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                        console.log('Response',response); // LOG dans Console Javascript
+                        if (response.connexion) {
+                            window.location = "./confirmationInscription.html";
+                        }
+                        else {
+                            $('#notification').html("Le login ou Mot de passe fourni est incorrecte,<br/> Veuillez réessayez svp "); // Message pour le paragraphe de notification
+                        }
+                    })
+                    .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                        console.log('Error',error); // LOG dans Console Javascript
+                        alert("Erreur lors de l'appel AJAX");
+                    })
+                    .always( function () { // Fonction toujours appelée
+                        
+                    });
+                });
+             $('#Annuler').on( 'click', function () { 
+                 window.location = "./index.html";
+             });
+            });
+        </script>
+        </main>
+    </body>
+</html>

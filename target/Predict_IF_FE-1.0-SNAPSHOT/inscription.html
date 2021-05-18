@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>PREDICT'IF - Inscription</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    </head>
+    <body class="m-0 p-0">
+        <header>
+            <div class="navbar navbar-dark bg-dark">
+                <div class="container d-flex justify-content-between">
+                    <a class="navbar-brand d-flex align-items-center" href="./index.html"><strong>PREDICT'IF</strong></a>
+                    <div class="d-flex">
+                        <a href="./connexion.html" class="btn bg-white mr-2">Connexion</a>
+                        <a href="./inscription.html" class="btn bg-white">Inscription</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="container-fluid">
+             <br/>
+             <br/>
+            <div class="col-sm-10 col-12 col-md-8 col-lg-6 col-xl-4 m-auto border border-light text-center">
+                <br/>
+                <br/>
+                <h1>Inscription</h1>
+                <br/>
+                <br/>
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" for="input-lastname">Nom</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="text" name="lastname" id="inputNom">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" for="input-firstname">Prénom</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="text" name="firstname" id="inputPrenom">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" for="select-genre">Genre</label>
+                        <div class="col-sm-8">
+                            <select class="form-control" name="genre" id= "inputGenre">
+                                <option value="H" selected>Homme</option>
+                                <option value="F">Femme</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" for="input-email">Mail</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="email" name="email" id="inputMail">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" for="input-password">Mot de passe</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="password" name="password" id="inputMotDePasse">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" for="input-birthday">Date de naissance</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="date" name="birthday" id="inputDate">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" for="input-mobilephone">Téléphone</label>
+                        <div class="col-sm-8">
+                            <input class="form-control" type="tel" name="mobilephone" id="inputTelephone">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-4 col-form-label" for="textarea-address">Adresse</label>
+                        <div class="col-sm-8">
+                            <textarea class="form-control" name="address" id="inputAdresse" cols="30" rows="10"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col">
+                            <button type="submit" class="btn btn-light mr-2" id="Annuler">Annuler</button>
+                            <button type="submit" class="btn btn-primary" id="Valider">S'inscrire</button>
+                        </div>
+                    </div>
+                    
+                    <div id="notifications"></div>
+            </div>
+        </main>
+    <script>
+            $(document).ready( function () {
+                $('#Valider').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
+
+                    console.log("clic sur le bouton d'inscription"); // LOG dans Console Javascript
+                 
+                    // Récupération de la valeur des champs du formulaire
+                    var nom = $('#inputNom').val();
+                    var prenom = $('#inputPrenom').val();
+                    var mail = $('#inputMail').val();
+                    var adresse = $('#inputAdresse').val();
+                    var telephone = $('#inputTelephone').val();
+                    var  date= $('#inputDate').val();
+                    var  genre= $('#inputGenre').val();
+                    var  mdp= $('#inputMotDePasse').val();
+                    
+                    // Appel AJAX
+                    $.ajax({
+                        url: './ActionServlet',
+                        method: 'POST',
+                        data: {
+                            todo: 'inscription',
+                            adresse: adresse,
+                            telephone: telephone,
+                            date :date,
+                            mail: mail,
+                            prenom :prenom,
+                            nom: nom,
+                            genre : genre,
+                            motDePasse : mdp
+                        },
+                        dataType: 'json'
+                    })
+                    .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                        console.log('Response',response); // LOG dans Console Javascript
+                        if (response.inscription) {
+                            window.location = "./confirmationInscription.html";
+                        }
+                        else {
+                            console.log('date : ' + date);
+                            $('#notification').html("Erreur d'inscription"); // Message pour le paragraphe de notification
+                        }
+                    })
+                    .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                        console.log('Error',error); // LOG dans Console Javascript
+                        alert("Erreur lors de l'appel AJAX");
+                    })
+                    .always( function () { // Fonction toujours appelée
+                        
+                    });
+                });
+             $('#Annuler').on( 'click', function () { 
+                 window.location = "./index.html";
+             });
+            });
+        </script>
+    </body>
+</html>
+

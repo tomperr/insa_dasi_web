@@ -1,0 +1,9 @@
+Serialisation\Serialisation.class
+Action\ActionServlet.class
+Action\ListeMediumAction.class
+Serialisation\ConnexionSerialisation.class
+Serialisation\ListeMediumSerialisation.class
+Action\ConnexionAction.class
+Action\InscriptionClientAction.class
+Serialisation\InscriptionClientSerialisation.class
+Action\Action.class
