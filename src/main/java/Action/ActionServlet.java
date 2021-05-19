@@ -62,7 +62,7 @@ public class ActionServlet extends HttpServlet {
                 break;
             }
            
-            case "testSession": {
+            case "recupererUtilisateurConnecte": {
                 action = new RecupererSessionAction(service);
                 serialisation = new RecupererSessionSerialisation();
                 break;
