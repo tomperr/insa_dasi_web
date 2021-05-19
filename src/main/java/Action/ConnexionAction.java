@@ -10,6 +10,7 @@ import dasi.dasi_projet.metier.service.Service;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -21,14 +22,18 @@ public class ConnexionAction extends Action {
     }
     @Override 
     public void execute(HttpServletRequest request){
-try{
+        try{
+            HttpSession session = request.getSession(true); 
             String login= request.getParameter("login");
             String mdp =  request.getParameter("password");
+            
             /* TODO output your page here. You may use following sample code. */
             Utilisateur utilisateur = service.authentifierUtilisateur(login,mdp);
-            request.setAttribute("utilisateur",utilisateur);
             if (utilisateur ==null){
-                       Logger.getAnonymousLogger().log(Level.SEVERE, "Non trouvée!");
+                Logger.getAnonymousLogger().log(Level.SEVERE, "Non trouvée!");
+            } else {
+                request.setAttribute("utilisateur", utilisateur);
+                session.setAttribute("utilisateur", utilisateur);
             }
         }
         catch(Exception ex){

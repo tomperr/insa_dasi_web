@@ -123,6 +123,26 @@ Vous pouvez dès à présent faire appel à nos services, nous ferons tout le n�
                 .always( function () { // Fonction toujours appelée
                     
                 });
+                
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'testSession',
+                    },
+                    dataType: 'json'
+                })
+                .done( function (response) {
+                    
+                   console.log(response);
+                })
+                .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                    console.log('Error',error); // LOG dans Console Javascript
+                    alert("Erreur lors de l'appel AJAX");
+                })
+                .always( function () { // Fonction toujours appelée
+                    
+                });
 
             });
         </script>

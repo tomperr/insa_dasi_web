@@ -8,6 +8,7 @@ package Action;
 import Serialisation.ConnexionSerialisation;
 import Serialisation.InscriptionClientSerialisation;
 import Serialisation.ListeMediumSerialisation;
+import Serialisation.RecupererSessionSerialisation;
 import Serialisation.Serialisation;
 import dasi.dasi_projet.dao.JpaUtil;
 import dasi.dasi_projet.metier.service.Service;
@@ -58,6 +59,12 @@ public class ActionServlet extends HttpServlet {
             case "listerMediumsAccueil":{
                 action = new ListeMediumAction(service);
                 serialisation = new ListeMediumSerialisation();
+                break;
+            }
+           
+            case "testSession": {
+                action = new RecupererSessionAction(service);
+                serialisation = new RecupererSessionSerialisation();
                 break;
             }
             
