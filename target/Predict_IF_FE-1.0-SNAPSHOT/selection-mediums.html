@@ -13,8 +13,8 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand d-flex align-items-center" href="./index.html"><strong>PREDICT'IF</strong></a>
                     <div class="d-flex">
-                        <a href="./connexion.html" class="btn bg-white mr-2">Connexion</a>
-                        <a href="./inscription.html" class="btn bg-white">Inscription</a>
+                        <a href="./espace-client.html" class="btn bg-white mr-2">Espace Client</a>
+                        <a href="./index.html" class="btn bg-white">Déconnexion</a>
                     </div>
                 </div>
             </div>
@@ -26,56 +26,233 @@
                         <div class="col">
                             <h3>Filtres</h3>
                             <div class="d-flex">
-                                <select class="form-control mr-3" name="" id="">
-                                    <option value="">Tous les genres de médiums</option>
+                                <select class="form-control mr-3" name="" id="Genre">
+                                    <option value="Tous">Tous les genres de médiums</option>
+                                    <option value="Homme">Homme</option>
+                                    <option value="Femme">Femme</option>
                                 </select>
-                                <select class="form-control" name="" id="">
-                                    <option value="">Toutes les spécialités de voyance</option>
+                                <select class="form-control" name="" id="TypeMedium">
+                                    <option value="Tous">Toutes les spécialités de voyance</option>
+                                    <option value="Cartomancien">Cartomancien</option>
+                                    <option value="Astrologue">Astrologue</option>
+                                    <option value="Spirite">Spirite</option>
                                 </select>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col">
-                            <h1 class="text-center my-2">Médiums</h1>
-                            <div class="bg-dark p-3 rounded my-2 text-white">
-                                <h3>Tom Apesquet</h3>
-                                <dl class="row">
-                                    <dt class="col-sm-3">Genre</dt>
-                                    <dd class="col-sm-9">Homme</dd>
-                                    <dt class="col-sm-3">Description</dt>
-                                    <dd class="col-sm-9">Je résouds vos problèmes avec la justice</dd>
-                                    <dt class="col-sm-3">Formation</dt>
-                                    <dd class="col-sm-9">Licence de Psychologie</dd>
-                                    <dt class="col-sm-3">Promotion</dt>
-                                    <dd class="col-sm-9">2000</dd>
-                                </dl>
-                            </div>
-
-                            <div class="bg-dark p-3 rounded my-2 text-white">
-                                <h3>Tom Apesquet</h3>
-                                <dl class="row">
-                                    <dt class="col-sm-3">Genre</dt>
-                                    <dd class="col-sm-9">Homme</dd>
-                                    <dt class="col-sm-3">Description</dt>
-                                    <dd class="col-sm-9">Je résouds vos problèmes avec la justice</dd>
-                                    <dt class="col-sm-3">Formation</dt>
-                                    <dd class="col-sm-9">Licence de Psychologie</dd>
-                                    <dt class="col-sm-3">Promotion</dt>
-                                    <dd class="col-sm-9">2000</dd>
-                                </dl>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
+                        <div class="row"><p id="Message"></p>
                         <div class="col text-right">
-                            <button class="btn btn-primary">Valider</button>
+                        </div>
+                    </div>
+                        <div class="col"id="container">
+                            <h1 class="text-center my-2">Médiums Disponibles</h1>
                         </div>
                     </div>
                 </div>
             </div>
+            <script>
+            function e(tag, parent, id, classs, value) {
+                let element = document.createElement(tag);
+                element.className = classs;
+                element.dataset.id = id;
+                element.innerHTML = value;
+                parent.appendChild(element);
+                return element;
+            }
+
+            $(document).ready( function () {
+        
+                // containers
+                let container = document.querySelector("#container");
+                let filtreGenre = document.querySelector("#Genre");
+                let filtreTypeMedium = document.querySelector("#TypeMedium");
+                // Appel AJAX
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'POST',
+                    data: {
+                        todo: 'listerMediums'
+                    },
+                    dataType: 'json'
+                })
+                .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                    
+                    console.log('Response',response); // LOG dans Console Javascript
+ 
+                    for (let astro of response.astrologues)
+                    {
+                        let bloc = e("div", container, astro.id, "bg-dark p-3 rounded my-2 text-white medium", "");
+                        let titre = e("h3",bloc,"","",astro.denomination);
+                        let dl = e("dl", bloc, "", "row", "");
+                        let dtGenre = e("dt", dl, "", "col-sm-3", "Genre");
+                        let ddGenre = e("dd", dl, "", "col-sm-9 genre", astro.genre);
+                        let dtDescription = e("dt", dl, "", "col-sm-3", "Description");
+                        let ddDescription = e("dd", dl, "", "col-sm-9", astro.presentation);
+                        let dtFormation = e("dt", dl, "", "col-sm-3", "Formation");
+                        let ddFormation = e("dd", dl, "", "col-sm-9", astro.formation);
+                        let dtPromotion = e("dt", dl, "", "col-sm-3", "Promotion");
+                        let ddPromotion = e("dd", dl, "", "col-sm-9", astro.promotion);
+                        let dtType = e("dt", dl, "", "col-sm-3", "Type");
+                        let ddType = e("dd", dl, "", "col-sm-9 type", astro.type);
+                    }
+                    for (let carto of response.cartomanciens)
+                    {
+                        let bloc = e("div", container, carto.id, "bg-dark p-3 rounded my-2 text-white medium", "");
+                        let titre = e("h3",bloc,"","",carto.denomination);
+                        let dl = e("dl", bloc, "", "row", "");
+                        let dtGenre = e("dt", dl, "", "col-sm-3", "Genre");
+                        let ddGenre = e("dd", dl, "", "col-sm-9 genre", carto.genre);
+                        let dtDescription = e("dt", dl, "", "col-sm-3", "Description");
+                        let ddDescription = e("dd", dl, "", "col-sm-9", carto.presentation);
+                        let dtType = e("dt", dl, "", "col-sm-3", "Type");
+                        let ddType = e("dd", dl, "", "col-sm-9 type", carto.type);
+                    }
+                  
+                    for (let spirite of response.spirites)
+                    {
+                        let bloc = e("div", container, spirite.id, "bg-dark p-3 rounded my-2 text-white medium", "");
+                        let titre = e("h3",bloc,"","",spirite.denomination);
+                        let dl = e("dl", bloc, "", "row", "");
+                        let dtGenre = e("dt", dl, "", "col-sm-3", "Genre");
+                        let ddGenre = e("dd", dl, "", "col-sm-9 genre", spirite.genre);
+                        let dtDescription = e("dt", dl, "", "col-sm-3", "Description");
+                        let ddDescription = e("dd", dl, "", "col-sm-9", spirite.presentation);
+                        let dtSupport = e("dt", dl, "", "col-sm-3", "Support");
+                        let ddsupport = e("dd", dl, "", "col-sm-9", spirite.support);
+                        let dtType = e("dt", dl, "", "col-sm-3", "Type");
+                        let ddType = e("dd", dl, "", "col-sm-9 type", spirite.type);
+                    }
+                    var mediums=document.querySelectorAll('.medium');
+                    for (var i=0;i<mediums.length;i++){
+                        let medium = mediums[i];
+                        medium.addEventListener('click',function(){
+                            //console.log('Test',mediums[i].dataset.id);
+                            mediumSelectionne = medium.dataset.id;
+                            if (window.confirm("Etes vous sur du choix du médium ? "+ mediumSelectionne)) {
+                                console.log("medium id : " + mediumSelectionne);
+                                
+                                $.ajax({
+                                    url: './ActionServlet',
+                                    method: 'POST',
+                                    data: {
+                                        todo: 'demanderConsultation',
+                                        id : mediumSelectionne,
+                                    },
+                                    dataType: 'json'
+                                }) 
+                                .done( function (responseNumero2) { // Fonction appelée en cas d'appel AJAX réussi
+                                    if (responseNumero2.ConsultationCree ===true){
+                                        window.location = "./confirmationConsultation.html";
+                                    }
+                                    else{
+                                        var Message = document.getElementById('Message');
+                                        var texte = "Le Médium choisi n'est pas disponible actuellement, Veuillez choisir un autre SVP";
+                                        Message.innerHTML = texte;
+                                    }
+                                })
+                                .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                    console.log('Error',error); // LOG dans Console Javascript
+                                    alert("Erreur lors de l'appel AJAX");
+                                })
+                                .always( function () { // Fonction toujours appelée
+
+                                });
+                            }
+                        });
+                    }
+                })
+                .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                    console.log('Error',error); // LOG dans Console Javascript
+                    alert("Erreur lors de l'appel AJAX");
+                })
+                .always( function () { // Fonction toujours appelée
+                    
+                });
+                
+                var mediumSelectionne = null;
+                
+                var setup = function(){
+                    /*setup: fonction utilisé lors du chargement de la page et contient tout les abonnements
+                     * Paramètres:Pas de paramètres
+                     * Résultat:(pas de return)met en marche tout les abonnements de la page
+                    */
+                    var genre=document.getElementById('Genre');
+                    genre.addEventListener("change",combineFiltre);
+                    var typeMedium=document.getElementById('TypeMedium');
+                    typeMedium.addEventListener("change",combineFiltre);	
+                };
+                
+                window.addEventListener('load',setup);
+
+
+                var filtreSelonGenre=function(){
+                    /*filtreFilm:filtre les films pour que seuls les films dont le title contient le texte présent dans #filter soient affichés dans le catalogue #films.
+                     * Paramètres:Pas de paramètres
+                     * Résultat:(pas de return)filtre les films pour que seuls les films dont le title contient le texte présent dans #filter soient affichés dans le catalogue #films.
+                    */
+                    var genreVoulu=document.getElementById('Genre');
+                    var elements=document.querySelectorAll('.genre');
+                    for (var i=0;i<elements.length;i++){
+                        if (elements[i].textContent !== genreVoulu.value ){
+                                elements[i].parentNode.parentNode.style.display="none";
+                        }
+                        else{
+                                elements[i].parentNode.parentNode.style.display="block";
+                        }
+                    }
+                };
+
+                var filtreSelonType=function(){
+                    /*filtreFilm:filtre les films pour que seuls les films dont le title contient le texte présent dans #filter soient affichés dans le catalogue #films.
+                     * Paramètres:Pas de paramètres
+                     * Résultat:(pas de return)filtre les films pour que seuls les films dont le title contient le texte présent dans #filter soient affichés dans le catalogue #films.
+                    */
+                    var typeVoulu=document.getElementById('TypeMedium');
+                    var elements=document.querySelectorAll('.type');
+                    for (var i=0;i<elements.length;i++){
+                        if (elements[i].textContent !== typeVoulu.value ){
+                                elements[i].parentNode.parentNode.style.display="none";
+                        }
+                        else{
+                                elements[i].parentNode.parentNode.style.display="block";
+                        }
+                    }
+               };
+
+                var combineFiltre=function(){
+                    var typeVoulu=document.getElementById('TypeMedium').value;
+                    var genreVoulu=document.getElementById('Genre').value;
+                    var elements=document.querySelectorAll('.type');
+                    var elements2=document.querySelectorAll('.genre');
+                    if ((typeVoulu ==="Tous") && (genreVoulu ==="Tous")){
+                        for (var i=0;i<elements.length;i++){
+                             elements[i].parentNode.parentNode.style.display="block";
+                        }
+                    }
+                    else if ((typeVoulu ==="Tous") && (genreVoulu !=="Tous")){
+                        filtreSelonGenre();
+                    }
+                    else if ((typeVoulu !=="Tous") && (genreVoulu ==="Tous")){
+                        filtreSelonType();
+                    }
+                    else{
+                        for (var i=0;i<elements.length;i++){
+                             if ( (elements[i].textContent !== typeVoulu ) || (elements2[i].textContent !== genreVoulu)){
+                                 elements[i].parentNode.parentNode.style.display="none";
+                             }
+                             else{
+                                 elements[i].parentNode.parentNode.style.display="block";
+                             }
+                        }
+                    }
+                };
+
+            });
+            
+
+            </script>
         </main>
     </body>
 </html>

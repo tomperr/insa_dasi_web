@@ -8,6 +8,7 @@ package Action;
 
 import Serialisation.CommencerConsultationSerialisation;
 import Serialisation.ConnexionSerialisation;
+import Serialisation.DemanderConsultationSerialisation;
 import Serialisation.GenererPredictionsSerialisation;
 import Serialisation.InscriptionClientSerialisation;
 import Serialisation.ListeMediumSerialisation;
@@ -64,7 +65,7 @@ public class ActionServlet extends HttpServlet {
                 break;
             }
             
-            case "listerMediumsAccueil":{
+            case "listerMediums":{
                 action = new ListeMediumAction(service);
                 serialisation = new ListeMediumSerialisation();
                 break;
@@ -100,15 +101,21 @@ public class ActionServlet extends HttpServlet {
                 break;
             }
             
-            case "terminerConsultation": {
-                action = new TerminerConsultationAction(service);
-                serialisation = new TerminerConsultationSerialisation();
+            case "demanderConsultation": {
+                action = new DemanderConsultationAction(service);
+                serialisation = new DemanderConsultationSerialisation();
                 break;
             }
             
             case "commencerConsultation": {
                 action = new CommencerConsultationAction(service);
                 serialisation = new CommencerConsultationSerialisation();
+                break;
+            }
+            
+            case "terminerConsultation": {
+                action = new TerminerConsultationAction(service);
+                serialisation = new TerminerConsultationSerialisation();
                 break;
             }
                         
