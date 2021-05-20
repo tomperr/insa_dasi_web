@@ -13,8 +13,8 @@
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand d-flex align-items-center" href="./index.html"><strong>PREDICT'IF</strong></a>
                     <div class="d-flex">
-                        <a href="./connexion.html" class="btn bg-white mr-2">Connexion</a>
-                        <a href="./inscription.html" class="btn bg-white">Inscription</a>
+                        <a id="Connexion" href="./espace-client.html" class="btn bg-white mr-2">Espace client</a>
+                        <a id="Inscription" href="./index.html" class="btn bg-white">Déconnexion</a>
                     </div>
                 </div>
             </div>
@@ -24,20 +24,20 @@
                 <div class="col-6 m-auto">
                     <div class="row">
                         <div class="col">
-                            <h1><b>Bonjour</b> Nom d'utilisateur</h1>
+                            <h1 id="theUserName"><b>Bonjour</b> Nom d'utilisateur</h1><br/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col text-center p-4">
-                            <h2>Votre profil astral</h2>
+                            <h2>Votre profil astral</h2><br/>
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h3 class="mx-4 my-2">Signe chinois <span><b>Dragon</b></span></h3>
-                                    <h3 class="mx-4 my-2">Animal <span><b>Chimpanzé</b></span></h3>
+                                    <h3 id="SigneChinois" class="mx-4 my-2">Signe chinois <br/><span><b></b></span></h3><br/>
+                                    <h3 id="Animal" class="mx-4 my-2">Animal <br/><span><b></b></span></h3>
                                 </div>
                                 <div>
-                                    <h3 class="mx-4 my-2">Couleur <span><b>Gris acier</b></span></h3>
-                                    <h3 class="mx-4 my-2">Signe zodiaque <span><b>Poisson</b></span></h3>
+                                    <h3 id="Couleur" class="mx-4 my-2">Couleur <br/><span><b></b></span></h3><br/>
+                                    <h3 id="SigneZodiaque" class="mx-4 my-2">Signe zodiaque <br/><span><b></b></span></h3>
                                 </div>
                             </div>
                         </div>
@@ -63,17 +63,14 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Date</th>
+                                        <th>Date de début</th>
+                                        <th>Date de fin</th>
                                         <th>Médium</th>
                                         <th>Spécialité</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>01/01/1990</td>
-                                        <td>Micheline</td>
-                                        <td>Grec</td>
-                                    </tr>
+                                <tbody id="historiqueConsultation">
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -81,5 +78,55 @@
                 </div>
             </div>
         </main>
+        <script>
+            
+            function element(tag,parent,id,value){
+                let element=document.createElement(tag);
+                if(id!="")
+                    element.id=id;
+                element.innerHTML=value;
+                parent.appendChild(element);
+                return element;
+            }
+            $(document).ready(function(){
+                $.ajax({
+                    url: './ActionServlet',
+                    meyhod: 'GET',
+                    data : {
+                        todo: 'recupererUtilisateurConnecte'
+                    },
+                    dataType : 'json'
+                })
+                .done(function (response){
+                    console.log(response);
+                    if(response!=null && response.connected == false){
+                        console.log("vous devez vous connecter pour rester ici");
+                    }else if(response!=null && response.connected == true){
+                        if(response.role != "Client"){
+                            console.log("vous n'êtes pas un client");
+                        }else{
+                            $('#theUserName').html("<b>Bonjour</b> "+response.user.prenom+" "+response.user.nom);
+                            $('#SigneChinois').html("Signe chinois <br/><span><b>"+response.user.profil_astral.signe_chinois+"</b></span>");
+                            $('#Animal').html("Animal <br/><span><b>"+response.user.profil_astral.animal+"</b></span>");
+                            $('#Couleur').html("Couleur <br/><span><b>"+response.user.profil_astral.couleur+"</b></span>");
+                            $('#SigneZodiaque').html("Signe zodiaque <br/><span><b>"+response.user.profil_astral.signe_zodiaque+"</b></span>");
+                            
+                            
+                            for(var i=0;i<response.user.consultations.length;++i){
+                                element("tr",document.getElementById("historiqueConsultation"),response.user.consultations[i].id,"");
+                                element("td",document.getElementById(response.user.consultations[i].id),"",response.user.consultations[i].date_debut);
+                                element("td",document.getElementById(response.user.consultations[i].id),"",response.user.consultations[i].date_fin);
+                                element("td",document.getElementById(response.user.consultations[i].id),"",response.user.consultations[i].medium.denomination);
+                                element("td",document.getElementById(response.user.consultations[i].id),"",response.user.consultations[i].medium.specialite);
+                            }
+                        }
+                    }
+                })
+                .fail(function(error){
+                    console.log("Error",error);
+                    alert("Erreur lors de l'appel AJAX");
+                })
+            });
+        </script>    
     </body>
 </html>

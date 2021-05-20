@@ -5,16 +5,19 @@
  */
 package Action;
 
-import Serialisation.*;
-/*
+
+import Serialisation.CommencerConsultationSerialisation;
 import Serialisation.ConnexionSerialisation;
 import Serialisation.GenererPredictionsSerialisation;
 import Serialisation.InscriptionClientSerialisation;
 import Serialisation.ListeMediumSerialisation;
-import Serialisation.RecupererSessionSerialisation;
+import Serialisation.RecupererClientSerialisation;
+import Serialisation.RecupererConsultationSerialisation;
+import Serialisation.RecupererMediumSerialisation;
+import Serialisation.RecupererUtilisateurConnecteSerialisation;
 import Serialisation.Serialisation;
 import Serialisation.TerminerConsultationSerialisation;
-*/
+
 import dasi.dasi_projet.dao.JpaUtil;
 import dasi.dasi_projet.metier.service.Service;
 import java.io.IOException;
@@ -68,8 +71,8 @@ public class ActionServlet extends HttpServlet {
             }
            
             case "recupererUtilisateurConnecte": {
-                action = new RecupererSessionAction(service);
-                serialisation = new RecupererSessionSerialisation();
+                action = new RecupererUtilisateurConnecteAction(service);
+                serialisation = new RecupererUtilisateurConnecteSerialisation();
                 break;
             }
             
@@ -83,13 +86,7 @@ public class ActionServlet extends HttpServlet {
                 action = new RecupererClientAction(service);
                 serialisation = new RecupererClientSerialisation();
                 break;
-            }
-            
-            case "recupererEmploye": {
-                action = new RecupererEmployeAction(service);
-                serialisation = new RecupererEmployeSerialisation();
-                break;
-            }
+            }    
             
             case "recupererMedium": {
                 action = new RecupererMediumAction(service);
