@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -50,10 +51,24 @@ public class RecupererSessionSerialisation extends Serialisation {
                         
                         JsonObject consultationObject = new JsonObject();
                         consultationObject.addProperty("id", c.getId());
-                        String strDateDebut = dateFormat.format(c.getDate_debut());  
-                        consultationObject.addProperty("date_debut", strDateDebut);
-                        String strDateFin = dateFormat.format(c.getDate_fin());  
-                        consultationObject.addProperty("date_fin", strDateFin);
+                        
+                        Date date_debut = c.getDate_debut();
+                        if (date_debut != null) {
+                            String strDateDebut = dateFormat.format(date_debut);
+                            consultationObject.addProperty("date_debut", strDateDebut);
+                        } else {
+                            consultationObject.addProperty("date_debut", (String)null);
+                        }
+                        
+                        
+                        Date date_fin = c.getDate_fin();
+                        if (date_fin != null) {
+                            String strDateFin = dateFormat.format(date_fin);
+                            consultationObject.addProperty("date_fin", strDateFin);
+                        } else {
+                            consultationObject.addProperty("date_fin", (String)null);
+                        }
+                        
                         consultationObject.addProperty("commentaire", c.getCommentaire());
                         
                         consultationsContainer.add(consultationObject);
@@ -72,10 +87,10 @@ public class RecupererSessionSerialisation extends Serialisation {
                         
                         JsonObject consultationObject = new JsonObject();
                         consultationObject.addProperty("id", c.getId());
-                        String strDateDebut = dateFormat.format(c.getDate_debut());  
-                        consultationObject.addProperty("date_debut", strDateDebut);
-                        String strDateFin = dateFormat.format(c.getDate_fin());  
-                        consultationObject.addProperty("date_fin", strDateFin);
+                        //String strDateDebut = dateFormat.format(c.getDate_debut());  
+                        //consultationObject.addProperty("date_debut", strDateDebut);
+                        //String strDateFin = dateFormat.format(c.getDate_fin());  
+                        //consultationObject.addProperty("date_fin", strDateFin);
                         consultationObject.addProperty("commentaire", c.getCommentaire());
                         
                         consultationsContainer.add(consultationObject);
@@ -104,7 +119,8 @@ public class RecupererSessionSerialisation extends Serialisation {
             out.close();    
         }
         catch(Exception ex){
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            ex.printStackTrace();
+            throw new UnsupportedOperationException(ex.getMessage()); //To change body of generated methods, choose Tools | Templates.
         }
     }
 }

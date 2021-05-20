@@ -5,11 +5,16 @@
  */
 package Action;
 
+import Serialisation.*;
+/*
 import Serialisation.ConnexionSerialisation;
+import Serialisation.GenererPredictionsSerialisation;
 import Serialisation.InscriptionClientSerialisation;
 import Serialisation.ListeMediumSerialisation;
 import Serialisation.RecupererSessionSerialisation;
 import Serialisation.Serialisation;
+import Serialisation.TerminerConsultationSerialisation;
+*/
 import dasi.dasi_projet.dao.JpaUtil;
 import dasi.dasi_projet.metier.service.Service;
 import java.io.IOException;
@@ -68,6 +73,48 @@ public class ActionServlet extends HttpServlet {
                 break;
             }
             
+             case "recupererConsultation": {
+                action = new RecupererConsultationAction(service);
+                serialisation = new RecupererConsultationSerialisation();
+                break;
+            }
+            
+            case "recupererClient": {
+                action = new RecupererClientAction(service);
+                serialisation = new RecupererClientSerialisation();
+                break;
+            }
+            
+            case "recupererEmploye": {
+                action = new RecupererEmployeAction(service);
+                serialisation = new RecupererEmployeSerialisation();
+                break;
+            }
+            
+            case "recupererMedium": {
+                action = new RecupererMediumAction(service);
+                serialisation = new RecupererMediumSerialisation();
+                break;
+            }
+            
+            case "genererPredictions": {
+                action = new GenererPredictionsAction(service);
+                serialisation = new GenererPredictionsSerialisation();
+                break;
+            }
+            
+            case "terminerConsultation": {
+                action = new TerminerConsultationAction(service);
+                serialisation = new TerminerConsultationSerialisation();
+                break;
+            }
+            
+            case "commencerConsultation": {
+                action = new CommencerConsultationAction(service);
+                serialisation = new CommencerConsultationSerialisation();
+                break;
+            }
+                        
         }
         if (action != null && serialisation != null){
             action.execute(request);

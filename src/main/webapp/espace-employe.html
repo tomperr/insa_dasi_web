@@ -24,24 +24,24 @@
                 <div class="col-6 m-auto">
                     <div class="row">
                         <div class="col">
-                            <h1><b>Bonjour</b> Nom d'utilisateur</h1>
+                            <h1><b>Bonjour</b> <span id="title-name"></span></h1>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row bg-white p-3">
+            <div class="row bg-white p-3" id="row-consultation">
                 <div class="col-6 m-auto border border-light bg-light p-2 rounded">
                     <div class="row mb-1">
                         <div class="col">
-                            <h2 class="text-center">Ma consultation en attente</h2>
+                            <h2 class="text-center" id="consultation-title">Ma consultation en attente</h2>
                         </div>
                     </div>
 
                     <div class="row mb-1">
                         <div class="col">
                             <h3>Médium à incarner</h3>
-                            <div class="bg-dark p-3 rounded my-2 text-white">
+                            <div class="bg-dark p-3 rounded my-2 text-white" id="consultation-medium">
                                 <h3>Tom Apesquet</h3>
                                 <dl class="row">
                                     <dt class="col-sm-3">Genre</dt>
@@ -62,7 +62,7 @@
                             <h3>Informations clients</h3>
                             <div class="row">
                                 <div class="col">
-                                    <dl class="row">
+                                    <dl class="row" id="consultation-client-1">
                                         <dt class="col-sm-5">Prénom</dt>
                                         <dd class="col-sm-7">Frodon</dd>
                                         <dt class="col-sm-5">Date de naissance</dt>
@@ -74,7 +74,7 @@
                                     </dl>
                                 </div>
                                 <div class="col">
-                                    <dl class="row">
+                                    <dl class="row" id="consultation-client-2">
                                         <dt class="col-sm-5">Nom</dt>
                                         <dd class="col-sm-7">Sacquet</dd>
                                         <dt class="col-sm-5">Téléphone</dt>
@@ -84,7 +84,7 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <dl class="row">
+                                    <dl class="row" id="consultation-profil-astral-1">
                                         <dt class="col-sm-5">Signe chinois</dt>
                                         <dd class="col-sm-7">Dragon</dd>
                                         <dt class="col-sm-5">Signe zodiaque</dt>
@@ -92,7 +92,7 @@
                                     </dl>
                                 </div>
                                 <div class="col">
-                                    <dl class="row">
+                                    <dl class="row" id="consultation-profil-astral-2">
                                         <dt class="col-sm-5">Couleur</dt>
                                         <dd class="col-sm-7">Gris acier</dd>
                                         <dt class="col-sm-5">Animal</dt>
@@ -112,13 +112,15 @@
                                         <th>Date</th>
                                         <th>Médium</th>
                                         <th>Spécialité</th>
+                                        <th>Commentaire</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="consultation-history">
                                     <tr>
                                         <td>01/01/1990</td>
                                         <td>Micheline</td>
                                         <td>Grec</td>
+                                        <td>...</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -127,9 +129,12 @@
 
                     <div class="row">
                         <div class="col text-center">
-                            <button class="btn btn-primary">Commencer</button>
+                            <button class="btn btn-primary" id="button-start">Commencer</button>
                         </div>
                     </div>
+                    
+                    <div id="aide-predictions-container"></div>
+                    
                 </div>
             </div>
 
@@ -140,4 +145,458 @@
             </div>
         </main>
     </body>
+
+    <script>
+        var titleName = document.querySelector('#title-name')
+        var consultationTitle = document.querySelector("#consultation-title")
+        var rowConsulation = document.querySelector("#row-consultation")
+        var consultationMedium = document.querySelector("#consultation-medium")
+        
+        var consultationClient1 = document.querySelector("#consultation-client-1")
+        var consultationClient2 = document.querySelector("#consultation-client-2")
+
+        var consultationProfilAstral1 = document.querySelector("#consultation-profil-astral-1")
+        var consultationProfilAstral2 = document.querySelector("#consultation-profil-astral-2")
+
+        var consultationHistory = document.querySelector("#consultation-history")
+
+        var startButton = document.querySelector("#button-start")
+
+        var ID_CONSULTATION = null;
+
+        function e(tag, parent, id, classs, value) {
+            let element = document.createElement(tag);
+            element.className = classs;
+            element.id = id;
+            element.innerHTML = value;
+            parent.appendChild(element);
+            return element;
+        }
+
+        function deleteAllChildren(elt)
+        {
+            while(elt.firstChild)
+            {
+                elt.removeChild(elt.firstChild)
+            }
+        }
+
+        function populateClientInfos(client)
+        {
+            deleteAllChildren(consultationClient1)
+            deleteAllChildren(consultationClient2)
+
+            deleteAllChildren(consultationProfilAstral1)
+            deleteAllChildren(consultationProfilAstral2)
+
+            // consultation 1
+            e("dt", consultationClient1, "", "col-sm-5", "Prénom")
+            e("dd", consultationClient1, "", "col-sm-7", client.prenom)
+            e("dt", consultationClient1, "", "col-sm-5", "Date de naissance")
+            e("dd", consultationClient1, "", "col-sm-7", client.date_naissance)
+            e("dt", consultationClient1, "", "col-sm-5", "Mail")
+            e("dd", consultationClient1, "", "col-sm-7", client.mail)
+            e("dt", consultationClient1, "", "col-sm-5", "Adresse")
+            e("dd", consultationClient1, "", "col-sm-7", client.adresse)
+
+            // consultation 2
+            e("dt", consultationClient2, "", "col-sm-5", "Nom")
+            e("dd", consultationClient2, "", "col-sm-7", client.nom)
+            e("dt", consultationClient2, "", "col-sm-5", "Téléphone")
+            e("dd", consultationClient2, "", "col-sm-7", client.telephone)
+
+            let pa = client.profil_astral
+
+            // profil astral 1
+            e("dt", consultationProfilAstral1, "", "col-sm-5", "Signe chinois")
+            e("dd", consultationProfilAstral1, "", "col-sm-7", pa.signe_chinois)
+            e("dt", consultationProfilAstral1, "", "col-sm-5", "Signe zodiaque")
+            e("dd", consultationProfilAstral1, "", "col-sm-7", pa.signe_zodiaque)
+
+            // profil astral 2
+            e("dt", consultationProfilAstral2, "", "col-sm-5", "Couleur")
+            e("dd", consultationProfilAstral2, "", "col-sm-7", pa.couleur)
+            e("dt", consultationProfilAstral2, "", "col-sm-5", "Animal")
+            e("dd", consultationProfilAstral2, "", "col-sm-7", pa.animal)
+        }
+
+        function populateMediumInfos(medium)
+        {
+            let title = consultationMedium.querySelector("h3")
+            let dl = consultationMedium.querySelector("dl")
+
+            deleteAllChildren(dl)
+
+            title.innerHTML = medium.denomination
+
+            e("dt", dl, "", "col-sm-3", "Présentation")
+            e("dd", dl, "", "col-sm-9", medium.presentation)
+            e("dt", dl, "", "col-sm-3", "Genre")
+            if(medium.genre == 'M')
+                e("dd", dl, "", "col-sm-9", "Homme")
+            else
+                e("dd", dl, "", "col-sm-9", "Femme")
+
+            switch(medium.role)
+            {
+                case "Astrologue": {
+                    e("dt", dl, "", "col-sm-3", "Formation")
+                    e("dd", dl, "", "col-sm-9", medium.formation)
+                    e("dt", dl, "", "col-sm-3", "Promotion")
+                    e("dd", dl, "", "col-sm-9", medium.promotion)
+                    break
+                }
+
+                case "Cartomancien": break
+
+                case "Spirite": {
+                    e("dt", dl, "", "col-sm-3", "Support")
+                    e("dd", dl, "", "col-sm-9", medium.support)
+                }
+            }
+        }
+
+        function populateConsultationsHistory(consultations)
+        {
+            deleteAllChildren(consultationHistory)
+
+            for(let consultation of consultations)
+            {
+                if(consultation.date_fin != null)
+                {
+                    let tr = e("tr", consultationHistory, "", "", "")
+                    e("th", tr, "", "", consultation.date_fin)
+                    e("th", tr, "", "", consultation.medium_denomination)
+                    e("th", tr, "", "", consultation.medium_specialty)
+                    e("th", tr, "", "", consultation.commentaire)
+
+                    consultationHistory.appendChild(tr)
+                }
+            }
+        }
+
+        function hideStartButton()
+        {
+            startButton.style.display = "none"
+            consultationTitle.innerHTML = "Ma consultation en cours."
+        }
+
+        function redirectionIndex()
+        {
+            window.location = "index.html"
+        }
+
+        function hideConsultation()
+        {
+            rowConsulation.style.display = "none"
+        }
+
+        $(document).ready( function () {
+            
+            // event start button
+            startButton.addEventListener("click", function() {
+                if(ID_CONSULTATION != null)
+                {
+                    $.ajax({
+                    url: './ActionServlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'commencerConsultation',
+                        id: ID_CONSULTATION
+                    },
+                    dataType: 'json'
+                })
+                .done( function (response) {
+                    console.log(response)
+                    if(response.status)
+                    {
+                        hideStartButton()
+                        alert("Le client a été notifié !")
+                        
+                        let current_consultation_container = document.querySelector("#aide-predictions-container");
+                        let selecteurs_predictions = e("div", current_consultation_container, "selecteurs_predictions", "row", "");
+
+                        let amour_col = e("div", selecteurs_predictions, "", "col-xs-12 col-md-4 px-3 text-center", "");
+                        let amour_col_container = e("div", amour_col, "", "border py-3", "");
+                        let amour_h4 = e("h4", amour_col_container, "", "", "Amour");
+                        let amour_range = e("input", amour_col_container, "amour-range", "form-range", "");
+                        amour_range.type = 'range';
+                        amour_range.min = 1;
+                        amour_range.max = 4;
+                        amour_range.step = 1;
+                        amour_range.value = 1;
+                        let amour_value = e("p", amour_col_container, "amour-value", "", "1");
+
+                        let sante_col = e("div", selecteurs_predictions, "", "col-xs-12 col-md-4 px-3 text-center", "");
+                        let sante_col_container = e("div", sante_col, "", "border py-3", "");
+                        let sante_h4 = e("h4", sante_col_container, "", "", "Santé");
+                        let sante_range = e("input", sante_col_container, "santer-range", "form-range", "");
+                        sante_range.type = 'range';
+                        sante_range.min = 1;
+                        sante_range.max = 4;
+                        sante_range.step = 1;
+                        sante_range.value = 1;
+                        let sante_value = e("p", sante_col_container, "sante-value", "", "1");
+
+                        let travail_col = e("div", selecteurs_predictions, "", "col-xs-12 col-md-4 px-3 text-center", "");
+                        let travail_col_container = e("div", travail_col, "", "border py-3", "");
+                        let travail_h4 = e("h4", travail_col_container, "", "", "Travail");
+                        let travail_range = e("input", travail_col_container, "travail-range", "form-range", "");
+                        travail_range.type = 'range';
+                        travail_range.min = 1;
+                        travail_range.max = 4;
+                        travail_range.step = 1;
+                        travail_range.value = 1;
+                        let travail_value = e("p", travail_col_container, "travail-value", "", "1");
+
+                        let bouton_generer_container = e("div", current_consultation_container, "", "m-auto text-center py-4", "");
+                        let bouton_generer = e("button", bouton_generer_container, "generer-bouton", "btn btn-primary", "Générer");
+
+                        let textes_predictions = e("div", current_consultation_container, "textes-predictions", "row", "");
+                        let prediction_amour = e("div", textes_predictions, "prediction-amour", "col-xs-12 col-md-4 px-3 text-center", "");
+                        let prediction_sante = e("div", textes_predictions, "textes-predictions", "col-xs-12 col-md-4 px-3 text-center", "");
+                        let prediction_travail = e("div", textes_predictions, "textes-predictions", "col-xs-12 col-md-4 px-3 text-center", "");
+
+                        let div_input_container = e("div", current_consultation_container, "", "", "");
+                        let form_group = e("div", div_input_container, "", "form-group", "");
+                        let label_commentaire = e("label", form_group, "", "", "Commentaire");
+                        label_commentaire.for = "inputCommentaire";
+                        let commentaire_input = e("textarea", form_group, "inputCommentaire", "form-control", "");
+                        let submit_container = e("div", div_input_container, "", "text-right", "");
+                        let bouton_terminer = e("button", submit_container, "terminerConsultation", "btn btn-primary", "Terminer la consultation");
+
+                        // EVENTS
+
+                        amour_range.addEventListener("change", function() {
+                            amour_value.innerHTML = this.value;
+                        });
+
+                        sante_range.addEventListener("change", function() {
+                            sante_value.innerHTML = this.value;
+                        });
+
+                        travail_range.addEventListener("change", function() {
+                            travail_value.innerHTML = this.value;
+                        });
+
+                        bouton_generer.addEventListener("click", function() {
+
+                            // Appel AJAX
+                            $.ajax({
+                                url: './ActionServlet',
+                                method: 'POST',
+                                data: {
+                                    todo: 'genererPredictions',
+                                    amour: amour_range.value,
+                                    sante: sante_range.value,
+                                    travail: travail_range.value
+                                },
+                                dataType: 'json'
+                            })
+                            .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                console.log('Response',response); // LOG dans Console Javascript    
+
+                                // remove old prediction
+                                prediction_amour.innerHTML = "";
+                                prediction_sante.innerHTML = "";
+                                prediction_travail.innerHTML = "";
+
+                                let container_amour = e("div", prediction_amour, "", "border p-3", "");
+                                e("p", container_amour, "", "", response.amour);
+
+                                let container_sante = e("div", prediction_sante, "", "border p-3", "");
+                                e("p", container_sante, "", "", response.sante);
+
+                                let container_travail = e("div", prediction_travail, "", "border p-3", "");
+                                e("p", container_travail, "", "", response.travail);
+
+                            })
+                            .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                console.log('Error',error); // LOG dans Console Javascript
+                                alert("Erreur lors de l'appel AJAX");
+                            })
+                            .always( function () { // Fonction toujours appelée
+
+                            });
+                        });
+
+                        bouton_terminer.addEventListener('click', function() {
+
+                            // Appel AJAX
+                            $.ajax({
+                                url: './ActionServlet',
+                                method: 'POST',
+                                data: {
+                                    todo: 'terminerConsultation',
+                                    commentaire: commentaire_input.value
+                                },
+                                dataType: 'json'
+                            })
+                            .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                console.log('Response',response); // LOG dans Console Javascript
+                                if (response.finished == "true") {
+                                    window.location = "./espace-employe.html";
+                                } else {
+                                    alert("Erreur lors de terminerConsultation");
+                                }
+                            })
+                            .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                console.log('Error',error); // LOG dans Console Javascript
+                                alert("Erreur lors de l'appel AJAX");
+                            })
+                            .always( function () { // Fonction toujours appelée
+
+                            });
+
+                        });
+
+                        
+                    }
+                })
+                .fail(function(error) {})
+                }
+            })
+
+            $.ajax({
+                url: './ActionServlet',
+                method: 'GET',
+                data: {
+                    todo: 'recupererEmploye',
+                },
+                dataType: 'json'
+            })
+            .done( function (response) {
+                
+                console.log(response);
+                if(response == null ||
+                 (response != null && response.connected == false))
+                {
+                    console.log("first" + response)
+                    redirectionIndex()
+                }
+                else if(response != null && response.connected == true)
+                {
+                    if(response.role != "Employe")
+                    {
+                        console.log("second" + response)
+                        redirectionIndex()
+                    }
+                    else
+                    {
+                        let employe = response.user
+                        let lastConsultation = null
+                        
+                        titleName.innerHTML = employe.prenom
+
+                        console.log("finding last consultation...")
+                        
+                        if(!employe.disponible)
+                        {
+                            for(let consultation of employe.consultations)
+                            {
+                                console.log(consultation)
+                                if(consultation.date_fin == null)
+                                {
+                                    console.log("found !")
+                                    lastConsultation = consultation
+                                    break;
+                                }
+                            }
+                        }
+                                                
+                        // recherche consultation
+
+                        if(lastConsultation != null)
+                        {
+                            ID_CONSULTATION = lastConsultation.id 
+
+                            console.log("getting full consultation...")
+                            $.ajax({
+                                url: './ActionServlet',
+                                method: 'GET',
+                                data: {
+                                    todo: 'recupererConsultation',
+                                    id: lastConsultation.id
+                                },
+                                dataType: 'json'
+                            })
+                            .done( function (response) {
+                                let consultation = response.consultation
+                                console.log("finding client information...")
+                                
+                                // Enlever le bouton commencer si la consultation est déjà commencée
+                                lastConsultation = consultation
+                                if(consultation.date_debut != null)
+                                {
+                                    hideStartButton()
+                                }
+
+                                // Récupération info client
+                                $.ajax({
+                                    url: './ActionServlet',
+                                    method: 'GET',
+                                    data: {
+                                        todo: 'recupererClient',
+                                        id: consultation.client_id
+                                    },
+                                    dataType: 'json'
+                                })
+                                .done( function (response) {
+                                    console.log(response)
+                                    if(response.status)
+                                        populateClientInfos(response.client)
+                                        populateConsultationsHistory(response.client.consultations)
+                                    
+                                })
+                                .fail(function(error) {
+                                    console.log('Error',error); // LOG dans Console Javascript
+                                    alert("Erreur lors de l'appel AJAX");
+                                })
+
+                                console.log("finding medium information...")
+
+                                // Récupération info medium
+                                $.ajax({
+                                    url: './ActionServlet',
+                                    method: 'GET',
+                                    data: {
+                                        todo: 'recupererMedium',
+                                        id: consultation.medium_id
+                                    },
+                                    dataType: 'json'
+                                })
+                                .done( function (response) {
+                                    console.log(response)
+                                    if(response.status)
+                                        populateMediumInfos(response.medium)
+                                })
+                                .fail(function(error) {
+                                    console.log('Error',error); // LOG dans Console Javascript
+                                    alert("Erreur lors de l'appel AJAX");
+                                })
+
+                                console.log(response)
+                            })
+                            .fail(function(error) {
+                                console.log('Error',error); // LOG dans Console Javascript
+                                alert("Erreur lors de l'appel AJAX");
+                            })
+                        }
+                        else
+                        {
+                            hideConsultation()
+                        }
+                        // recherche client
+
+                    }
+                }
+            })
+            .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                console.log('Error',error); // LOG dans Console Javascript
+                alert("Erreur lors de l'appel AJAX");
+            })
+        });
+        
+        
+    </script>
 </html>
