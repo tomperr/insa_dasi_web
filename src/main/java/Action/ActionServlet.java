@@ -5,19 +5,20 @@
  */
 package Action;
 
-
 import Serialisation.CommencerConsultationSerialisation;
 import Serialisation.ConnexionSerialisation;
 import Serialisation.DemanderConsultationSerialisation;
 import Serialisation.GenererPredictionsSerialisation;
 import Serialisation.InscriptionClientSerialisation;
 import Serialisation.ListeMediumSerialisation;
+import Serialisation.MenuNavigationSerialisation;
 import Serialisation.RecupererClientSerialisation;
 import Serialisation.RecupererConsultationSerialisation;
 import Serialisation.RecupererMediumSerialisation;
 import Serialisation.RecupererUtilisateurConnecteSerialisation;
 import Serialisation.Serialisation;
 import Serialisation.TerminerConsultationSerialisation;
+import Serialisation.RecupererStatistiquesSerialisation;
 
 import dasi.dasi_projet.dao.JpaUtil;
 import dasi.dasi_projet.metier.service.Service;
@@ -116,6 +117,18 @@ public class ActionServlet extends HttpServlet {
             case "terminerConsultation": {
                 action = new TerminerConsultationAction(service);
                 serialisation = new TerminerConsultationSerialisation();
+                break;
+            }
+            
+            case "recupererStatistiques": {
+                action = new RecupererStatistiquesAction(service);
+                serialisation = new RecupererStatistiquesSerialisation();
+                break;
+            }
+            
+            case "menuNavigation": {
+                action = new MenuNavigationAction(service);
+                serialisation = new MenuNavigationSerialisation();
                 break;
             }
                         

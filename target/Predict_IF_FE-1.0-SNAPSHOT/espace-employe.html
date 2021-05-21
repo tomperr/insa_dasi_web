@@ -12,10 +12,7 @@
             <div class="navbar navbar-dark bg-dark">
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand d-flex align-items-center" href="./index.html"><strong>PREDICT'IF</strong></a>
-                    <div class="d-flex">
-                        <a href="./connexion.html" class="btn bg-white mr-2">Connexion</a>
-                        <a href="./inscription.html" class="btn bg-white">Inscription</a>
-                    </div>
+                    <div class="d-flex" id="navbar-buttons"></div>
                 </div>
             </div>
         </header>
@@ -139,165 +136,223 @@
             </div>
 
             <div class="row bg-dark p-3">
-                <div class="col-6 m-auto">
-                    <h2 class="text-center text-white">Statistiques de l'agence</h2>
+            <div class="col-6 m-auto">
+                <div class="row">
+                    <div class="col">
+                        <h2 class="text-center text-white">Statistiques de l'agence</h2>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col">
+                        <div id="container-1" class="highcharts-container"></div>
+                    </div>
+                </div>
+
+                <div class="row text-center mt-2">
+                    <div class="col text-white">
+                        <h2>Top Medium</h2>
+                    </div>
+                </div>
+
+                <div class="row text-center mt-2">
+                    <div class="col-5 m-auto text-white">
+                        <dl class="row" id="statistique-top-medium">
+                        </dl>
+                    </div>
                 </div>
             </div>
+        </div>
         </main>
     </body>
 
+    <script src="https://code.highcharts.com/highcharts.js"></script>
     <script>
-        var titleName = document.querySelector('#title-name')
-        var consultationTitle = document.querySelector("#consultation-title")
-        var rowConsulation = document.querySelector("#row-consultation")
-        var consultationMedium = document.querySelector("#consultation-medium")
         
-        var consultationClient1 = document.querySelector("#consultation-client-1")
-        var consultationClient2 = document.querySelector("#consultation-client-2")
+    var titleName = document.querySelector('#title-name')
+    var consultationTitle = document.querySelector("#consultation-title")
+    var rowConsulation = document.querySelector("#row-consultation")
+    var consultationMedium = document.querySelector("#consultation-medium")
 
-        var consultationProfilAstral1 = document.querySelector("#consultation-profil-astral-1")
-        var consultationProfilAstral2 = document.querySelector("#consultation-profil-astral-2")
+    var consultationClient1 = document.querySelector("#consultation-client-1")
+    var consultationClient2 = document.querySelector("#consultation-client-2")
 
-        var consultationHistory = document.querySelector("#consultation-history")
+    var consultationProfilAstral1 = document.querySelector("#consultation-profil-astral-1")
+    var consultationProfilAstral2 = document.querySelector("#consultation-profil-astral-2")
 
-        var startButton = document.querySelector("#button-start")
+    var consultationHistory = document.querySelector("#consultation-history")
 
-        var ID_CONSULTATION = null;
+    var startButton = document.querySelector("#button-start")
 
-        function e(tag, parent, id, classs, value) {
-            let element = document.createElement(tag);
-            element.className = classs;
-            element.id = id;
-            element.innerHTML = value;
-            parent.appendChild(element);
-            return element;
+    var statistiqueTopMedium = document.querySelector("#statistique-top-medium")
+
+    var ID_CONSULTATION = null;
+
+    function e(tag, parent, id, classs, value) {
+        let element = document.createElement(tag);
+        element.className = classs;
+        element.id = id;
+        element.innerHTML = value;
+        parent.appendChild(element);
+        return element;
+    }
+
+    function deleteAllChildren(elt) {
+        while (elt.firstChild) {
+            elt.removeChild(elt.firstChild)
         }
+    }
 
-        function deleteAllChildren(elt)
-        {
-            while(elt.firstChild)
-            {
-                elt.removeChild(elt.firstChild)
+    function populateClientInfos(client) {
+        deleteAllChildren(consultationClient1)
+        deleteAllChildren(consultationClient2)
+
+        deleteAllChildren(consultationProfilAstral1)
+        deleteAllChildren(consultationProfilAstral2)
+
+        // consultation 1
+        e("dt", consultationClient1, "", "col-sm-5", "Prénom")
+        e("dd", consultationClient1, "", "col-sm-7", client.prenom)
+        e("dt", consultationClient1, "", "col-sm-5", "Date de naissance")
+        e("dd", consultationClient1, "", "col-sm-7", client.date_naissance)
+        e("dt", consultationClient1, "", "col-sm-5", "Mail")
+        e("dd", consultationClient1, "", "col-sm-7", client.mail)
+        e("dt", consultationClient1, "", "col-sm-5", "Adresse")
+        e("dd", consultationClient1, "", "col-sm-7", client.adresse)
+
+        // consultation 2
+        e("dt", consultationClient2, "", "col-sm-5", "Nom")
+        e("dd", consultationClient2, "", "col-sm-7", client.nom)
+        e("dt", consultationClient2, "", "col-sm-5", "Téléphone")
+        e("dd", consultationClient2, "", "col-sm-7", client.telephone)
+
+        let pa = client.profil_astral
+
+        // profil astral 1
+        e("dt", consultationProfilAstral1, "", "col-sm-5", "Signe chinois")
+        e("dd", consultationProfilAstral1, "", "col-sm-7", pa.signe_chinois)
+        e("dt", consultationProfilAstral1, "", "col-sm-5", "Signe zodiaque")
+        e("dd", consultationProfilAstral1, "", "col-sm-7", pa.signe_zodiaque)
+
+        // profil astral 2
+        e("dt", consultationProfilAstral2, "", "col-sm-5", "Couleur")
+        e("dd", consultationProfilAstral2, "", "col-sm-7", pa.couleur)
+        e("dt", consultationProfilAstral2, "", "col-sm-5", "Animal")
+        e("dd", consultationProfilAstral2, "", "col-sm-7", pa.animal)
+    }
+
+    function populateMediumInfos(medium) {
+        let title = consultationMedium.querySelector("h3")
+        let dl = consultationMedium.querySelector("dl")
+
+        deleteAllChildren(dl)
+
+        title.innerHTML = medium.denomination
+
+        e("dt", dl, "", "col-sm-3", "Présentation")
+        e("dd", dl, "", "col-sm-9", medium.presentation)
+        e("dt", dl, "", "col-sm-3", "Genre")
+        if (medium.genre == 'M')
+            e("dd", dl, "", "col-sm-9", "Homme")
+        else
+            e("dd", dl, "", "col-sm-9", "Femme")
+
+        switch (medium.role) {
+            case "Astrologue": {
+                e("dt", dl, "", "col-sm-3", "Formation")
+                e("dd", dl, "", "col-sm-9", medium.formation)
+                e("dt", dl, "", "col-sm-3", "Promotion")
+                e("dd", dl, "", "col-sm-9", medium.promotion)
+                break
+            }
+
+            case "Cartomancien": break
+
+            case "Spirite": {
+                e("dt", dl, "", "col-sm-3", "Support")
+                e("dd", dl, "", "col-sm-9", medium.support)
             }
         }
+    }
 
-        function populateClientInfos(client)
-        {
-            deleteAllChildren(consultationClient1)
-            deleteAllChildren(consultationClient2)
+    function populateConsultationsHistory(consultations) {
+        deleteAllChildren(consultationHistory)
 
-            deleteAllChildren(consultationProfilAstral1)
-            deleteAllChildren(consultationProfilAstral2)
+        for (let consultation of consultations) {
+            if (consultation.date_fin != null) {
+                let tr = e("tr", consultationHistory, "", "", "")
+                e("th", tr, "", "", consultation.date_fin)
+                e("th", tr, "", "", consultation.medium_denomination)
+                e("th", tr, "", "", consultation.medium_specialty)
+                e("th", tr, "", "", consultation.commentaire)
 
-            // consultation 1
-            e("dt", consultationClient1, "", "col-sm-5", "Prénom")
-            e("dd", consultationClient1, "", "col-sm-7", client.prenom)
-            e("dt", consultationClient1, "", "col-sm-5", "Date de naissance")
-            e("dd", consultationClient1, "", "col-sm-7", client.date_naissance)
-            e("dt", consultationClient1, "", "col-sm-5", "Mail")
-            e("dd", consultationClient1, "", "col-sm-7", client.mail)
-            e("dt", consultationClient1, "", "col-sm-5", "Adresse")
-            e("dd", consultationClient1, "", "col-sm-7", client.adresse)
-
-            // consultation 2
-            e("dt", consultationClient2, "", "col-sm-5", "Nom")
-            e("dd", consultationClient2, "", "col-sm-7", client.nom)
-            e("dt", consultationClient2, "", "col-sm-5", "Téléphone")
-            e("dd", consultationClient2, "", "col-sm-7", client.telephone)
-
-            let pa = client.profil_astral
-
-            // profil astral 1
-            e("dt", consultationProfilAstral1, "", "col-sm-5", "Signe chinois")
-            e("dd", consultationProfilAstral1, "", "col-sm-7", pa.signe_chinois)
-            e("dt", consultationProfilAstral1, "", "col-sm-5", "Signe zodiaque")
-            e("dd", consultationProfilAstral1, "", "col-sm-7", pa.signe_zodiaque)
-
-            // profil astral 2
-            e("dt", consultationProfilAstral2, "", "col-sm-5", "Couleur")
-            e("dd", consultationProfilAstral2, "", "col-sm-7", pa.couleur)
-            e("dt", consultationProfilAstral2, "", "col-sm-5", "Animal")
-            e("dd", consultationProfilAstral2, "", "col-sm-7", pa.animal)
-        }
-
-        function populateMediumInfos(medium)
-        {
-            let title = consultationMedium.querySelector("h3")
-            let dl = consultationMedium.querySelector("dl")
-
-            deleteAllChildren(dl)
-
-            title.innerHTML = medium.denomination
-
-            e("dt", dl, "", "col-sm-3", "Présentation")
-            e("dd", dl, "", "col-sm-9", medium.presentation)
-            e("dt", dl, "", "col-sm-3", "Genre")
-            if(medium.genre == 'M')
-                e("dd", dl, "", "col-sm-9", "Homme")
-            else
-                e("dd", dl, "", "col-sm-9", "Femme")
-
-            switch(medium.role)
-            {
-                case "Astrologue": {
-                    e("dt", dl, "", "col-sm-3", "Formation")
-                    e("dd", dl, "", "col-sm-9", medium.formation)
-                    e("dt", dl, "", "col-sm-3", "Promotion")
-                    e("dd", dl, "", "col-sm-9", medium.promotion)
-                    break
-                }
-
-                case "Cartomancien": break
-
-                case "Spirite": {
-                    e("dt", dl, "", "col-sm-3", "Support")
-                    e("dd", dl, "", "col-sm-9", medium.support)
-                }
+                consultationHistory.appendChild(tr)
             }
         }
+    }
 
-        function populateConsultationsHistory(consultations)
-        {
-            deleteAllChildren(consultationHistory)
+    function hideStartButton() {
+        startButton.style.display = "none"
+        consultationTitle.innerHTML = "Ma consultation en cours."
+    }
 
-            for(let consultation of consultations)
-            {
-                if(consultation.date_fin != null)
-                {
-                    let tr = e("tr", consultationHistory, "", "", "")
-                    e("th", tr, "", "", consultation.date_fin)
-                    e("th", tr, "", "", consultation.medium_denomination)
-                    e("th", tr, "", "", consultation.medium_specialty)
-                    e("th", tr, "", "", consultation.commentaire)
+    function redirectionIndex() {
+        window.location = "index.html"
+    }
 
-                    consultationHistory.appendChild(tr)
+    function hideConsultation() {
+        rowConsulation.style.display = "none"
+    }
+
+    function populateStatTopMedium(top) {
+        deleteAllChildren(statistiqueTopMedium)
+
+        e("dt", statistiqueTopMedium, "", "col-sm-6", "Premier")
+        e("dd", statistiqueTopMedium, "", "col-sm-6", top[0])
+        e("dt", statistiqueTopMedium, "", "col-sm-6", "Deuxième")
+        e("dd", statistiqueTopMedium, "", "col-sm-6", top[1])
+        e("dt", statistiqueTopMedium, "", "col-sm-6", "Troisième")
+        e("dd", statistiqueTopMedium, "", "col-sm-6", top[2])
+        e("dt", statistiqueTopMedium, "", "col-sm-6", "Quatrième")
+        e("dd", statistiqueTopMedium, "", "col-sm-6", top[3])
+        e("dt", statistiqueTopMedium, "", "col-sm-6", "Cinquième")
+        e("dd", statistiqueTopMedium, "", "col-sm-6", top[4])
+    }
+
+    function buildBarChart(container, graphData) {
+
+        Highcharts.chart(container, {
+
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Nombre de consultations par Medium'
+            },
+            xAxis: {
+                categories: graphData.labels
+            },
+            yAxis: {
+                title: {
+                    text: 'Nombre de consultations'
                 }
-            }
-        }
+            },
+            legend: {
+                enabled: false
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{ name: 'Données', data: graphData.data }]
+        });
+    }
 
-        function hideStartButton()
-        {
-            startButton.style.display = "none"
-            consultationTitle.innerHTML = "Ma consultation en cours."
-        }
+    $(document).ready(function () {
 
-        function redirectionIndex()
-        {
-            window.location = "index.html"
-        }
-
-        function hideConsultation()
-        {
-            rowConsulation.style.display = "none"
-        }
-
-        $(document).ready( function () {
-            
-            // event start button
-            startButton.addEventListener("click", function() {
-                if(ID_CONSULTATION != null)
-                {
-                    $.ajax({
+        // event start button
+        startButton.addEventListener("click", function () {
+            if (ID_CONSULTATION != null) {
+                $.ajax({
                     url: './ActionServlet',
                     method: 'GET',
                     data: {
@@ -306,209 +361,199 @@
                     },
                     dataType: 'json'
                 })
-                .done( function (response) {
-                    console.log(response)
-                    if(response.status)
-                    {
-                        hideStartButton()
-                        alert("Le client a été notifié !")
-                        
-                        let current_consultation_container = document.querySelector("#aide-predictions-container");
-                        let selecteurs_predictions = e("div", current_consultation_container, "selecteurs_predictions", "row", "");
+                    .done(function (response) {
+                        console.log(response)
+                        if (response.status) {
+                            hideStartButton()
+                            alert("Le client a été notifié !")
 
-                        let amour_col = e("div", selecteurs_predictions, "", "col-xs-12 col-md-4 px-3 text-center", "");
-                        let amour_col_container = e("div", amour_col, "", "border py-3", "");
-                        let amour_h4 = e("h4", amour_col_container, "", "", "Amour");
-                        let amour_range = e("input", amour_col_container, "amour-range", "form-range", "");
-                        amour_range.type = 'range';
-                        amour_range.min = 1;
-                        amour_range.max = 4;
-                        amour_range.step = 1;
-                        amour_range.value = 1;
-                        let amour_value = e("p", amour_col_container, "amour-value", "", "1");
+                            let current_consultation_container = document.querySelector("#aide-predictions-container");
+                            let selecteurs_predictions = e("div", current_consultation_container, "selecteurs_predictions", "row", "");
 
-                        let sante_col = e("div", selecteurs_predictions, "", "col-xs-12 col-md-4 px-3 text-center", "");
-                        let sante_col_container = e("div", sante_col, "", "border py-3", "");
-                        let sante_h4 = e("h4", sante_col_container, "", "", "Santé");
-                        let sante_range = e("input", sante_col_container, "santer-range", "form-range", "");
-                        sante_range.type = 'range';
-                        sante_range.min = 1;
-                        sante_range.max = 4;
-                        sante_range.step = 1;
-                        sante_range.value = 1;
-                        let sante_value = e("p", sante_col_container, "sante-value", "", "1");
+                            let amour_col = e("div", selecteurs_predictions, "", "col-xs-12 col-md-4 px-3 text-center", "");
+                            let amour_col_container = e("div", amour_col, "", "border py-3", "");
+                            let amour_h4 = e("h4", amour_col_container, "", "", "Amour");
+                            let amour_range = e("input", amour_col_container, "amour-range", "form-range", "");
+                            amour_range.type = 'range';
+                            amour_range.min = 1;
+                            amour_range.max = 4;
+                            amour_range.step = 1;
+                            amour_range.value = 1;
+                            let amour_value = e("p", amour_col_container, "amour-value", "", "1");
 
-                        let travail_col = e("div", selecteurs_predictions, "", "col-xs-12 col-md-4 px-3 text-center", "");
-                        let travail_col_container = e("div", travail_col, "", "border py-3", "");
-                        let travail_h4 = e("h4", travail_col_container, "", "", "Travail");
-                        let travail_range = e("input", travail_col_container, "travail-range", "form-range", "");
-                        travail_range.type = 'range';
-                        travail_range.min = 1;
-                        travail_range.max = 4;
-                        travail_range.step = 1;
-                        travail_range.value = 1;
-                        let travail_value = e("p", travail_col_container, "travail-value", "", "1");
+                            let sante_col = e("div", selecteurs_predictions, "", "col-xs-12 col-md-4 px-3 text-center", "");
+                            let sante_col_container = e("div", sante_col, "", "border py-3", "");
+                            let sante_h4 = e("h4", sante_col_container, "", "", "Santé");
+                            let sante_range = e("input", sante_col_container, "santer-range", "form-range", "");
+                            sante_range.type = 'range';
+                            sante_range.min = 1;
+                            sante_range.max = 4;
+                            sante_range.step = 1;
+                            sante_range.value = 1;
+                            let sante_value = e("p", sante_col_container, "sante-value", "", "1");
 
-                        let bouton_generer_container = e("div", current_consultation_container, "", "m-auto text-center py-4", "");
-                        let bouton_generer = e("button", bouton_generer_container, "generer-bouton", "btn btn-primary", "Générer");
+                            let travail_col = e("div", selecteurs_predictions, "", "col-xs-12 col-md-4 px-3 text-center", "");
+                            let travail_col_container = e("div", travail_col, "", "border py-3", "");
+                            let travail_h4 = e("h4", travail_col_container, "", "", "Travail");
+                            let travail_range = e("input", travail_col_container, "travail-range", "form-range", "");
+                            travail_range.type = 'range';
+                            travail_range.min = 1;
+                            travail_range.max = 4;
+                            travail_range.step = 1;
+                            travail_range.value = 1;
+                            let travail_value = e("p", travail_col_container, "travail-value", "", "1");
 
-                        let textes_predictions = e("div", current_consultation_container, "textes-predictions", "row", "");
-                        let prediction_amour = e("div", textes_predictions, "prediction-amour", "col-xs-12 col-md-4 px-3 text-center", "");
-                        let prediction_sante = e("div", textes_predictions, "textes-predictions", "col-xs-12 col-md-4 px-3 text-center", "");
-                        let prediction_travail = e("div", textes_predictions, "textes-predictions", "col-xs-12 col-md-4 px-3 text-center", "");
+                            let bouton_generer_container = e("div", current_consultation_container, "", "m-auto text-center py-4", "");
+                            let bouton_generer = e("button", bouton_generer_container, "generer-bouton", "btn btn-primary", "Générer");
 
-                        let div_input_container = e("div", current_consultation_container, "", "", "");
-                        let form_group = e("div", div_input_container, "", "form-group", "");
-                        let label_commentaire = e("label", form_group, "", "", "Commentaire");
-                        label_commentaire.for = "inputCommentaire";
-                        let commentaire_input = e("textarea", form_group, "inputCommentaire", "form-control", "");
-                        let submit_container = e("div", div_input_container, "", "text-right", "");
-                        let bouton_terminer = e("button", submit_container, "terminerConsultation", "btn btn-primary", "Terminer la consultation");
+                            let textes_predictions = e("div", current_consultation_container, "textes-predictions", "row", "");
+                            let prediction_amour = e("div", textes_predictions, "prediction-amour", "col-xs-12 col-md-4 px-3 text-center", "");
+                            let prediction_sante = e("div", textes_predictions, "textes-predictions", "col-xs-12 col-md-4 px-3 text-center", "");
+                            let prediction_travail = e("div", textes_predictions, "textes-predictions", "col-xs-12 col-md-4 px-3 text-center", "");
 
-                        // EVENTS
+                            let div_input_container = e("div", current_consultation_container, "", "", "");
+                            let form_group = e("div", div_input_container, "", "form-group", "");
+                            let label_commentaire = e("label", form_group, "", "", "Commentaire");
+                            label_commentaire.for = "inputCommentaire";
+                            let commentaire_input = e("textarea", form_group, "inputCommentaire", "form-control", "");
+                            let submit_container = e("div", div_input_container, "", "text-right", "");
+                            let bouton_terminer = e("button", submit_container, "terminerConsultation", "btn btn-primary", "Terminer la consultation");
 
-                        amour_range.addEventListener("change", function() {
-                            amour_value.innerHTML = this.value;
-                        });
+                            // EVENTS
 
-                        sante_range.addEventListener("change", function() {
-                            sante_value.innerHTML = this.value;
-                        });
-
-                        travail_range.addEventListener("change", function() {
-                            travail_value.innerHTML = this.value;
-                        });
-
-                        bouton_generer.addEventListener("click", function() {
-
-                            // Appel AJAX
-                            $.ajax({
-                                url: './ActionServlet',
-                                method: 'POST',
-                                data: {
-                                    todo: 'genererPredictions',
-                                    amour: amour_range.value,
-                                    sante: sante_range.value,
-                                    travail: travail_range.value
-                                },
-                                dataType: 'json'
-                            })
-                            .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                                console.log('Response',response); // LOG dans Console Javascript    
-
-                                // remove old prediction
-                                prediction_amour.innerHTML = "";
-                                prediction_sante.innerHTML = "";
-                                prediction_travail.innerHTML = "";
-
-                                let container_amour = e("div", prediction_amour, "", "border p-3", "");
-                                e("p", container_amour, "", "", response.amour);
-
-                                let container_sante = e("div", prediction_sante, "", "border p-3", "");
-                                e("p", container_sante, "", "", response.sante);
-
-                                let container_travail = e("div", prediction_travail, "", "border p-3", "");
-                                e("p", container_travail, "", "", response.travail);
-
-                            })
-                            .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
-                                console.log('Error',error); // LOG dans Console Javascript
-                                alert("Erreur lors de l'appel AJAX");
-                            })
-                            .always( function () { // Fonction toujours appelée
-
-                            });
-                        });
-
-                        bouton_terminer.addEventListener('click', function() {
-
-                            // Appel AJAX
-                            $.ajax({
-                                url: './ActionServlet',
-                                method: 'POST',
-                                data: {
-                                    todo: 'terminerConsultation',
-                                    commentaire: commentaire_input.value
-                                },
-                                dataType: 'json'
-                            })
-                            .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                                console.log('Response',response); // LOG dans Console Javascript
-                                if (response.finished == "true") {
-                                    window.location = "./espace-employe.html";
-                                } else {
-                                    alert("Erreur lors de terminerConsultation");
-                                }
-                            })
-                            .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
-                                console.log('Error',error); // LOG dans Console Javascript
-                                alert("Erreur lors de l'appel AJAX");
-                            })
-                            .always( function () { // Fonction toujours appelée
-
+                            amour_range.addEventListener("change", function () {
+                                amour_value.innerHTML = this.value;
                             });
 
-                        });
+                            sante_range.addEventListener("change", function () {
+                                sante_value.innerHTML = this.value;
+                            });
 
-                        
-                    }
-                })
-                .fail(function(error) {})
-                }
-            })
+                            travail_range.addEventListener("change", function () {
+                                travail_value.innerHTML = this.value;
+                            });
 
-            $.ajax({
-                url: './ActionServlet',
-                method: 'GET',
-                data: {
-                    todo: 'recupererUtilisateurConnecte',
-                },
-                dataType: 'json'
-            })
-            .done( function (response) {
-                
+                            bouton_generer.addEventListener("click", function () {
+
+                                // Appel AJAX
+                                $.ajax({
+                                    url: './ActionServlet',
+                                    method: 'POST',
+                                    data: {
+                                        todo: 'genererPredictions',
+                                        amour: amour_range.value,
+                                        sante: sante_range.value,
+                                        travail: travail_range.value
+                                    },
+                                    dataType: 'json'
+                                })
+                                    .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                        console.log('Response', response); // LOG dans Console Javascript    
+
+                                        // remove old prediction
+                                        prediction_amour.innerHTML = "";
+                                        prediction_sante.innerHTML = "";
+                                        prediction_travail.innerHTML = "";
+
+                                        let container_amour = e("div", prediction_amour, "", "border p-3", "");
+                                        e("p", container_amour, "", "", response.amour);
+
+                                        let container_sante = e("div", prediction_sante, "", "border p-3", "");
+                                        e("p", container_sante, "", "", response.sante);
+
+                                        let container_travail = e("div", prediction_travail, "", "border p-3", "");
+                                        e("p", container_travail, "", "", response.travail);
+
+                                    })
+                                    .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                        console.log('Error', error); // LOG dans Console Javascript
+                                        alert("Erreur lors de l'appel AJAX");
+                                    })
+                                    .always(function () { // Fonction toujours appelée
+
+                                    });
+                            });
+
+                            bouton_terminer.addEventListener('click', function () {
+
+                                // Appel AJAX
+                                $.ajax({
+                                    url: './ActionServlet',
+                                    method: 'POST',
+                                    data: {
+                                        todo: 'terminerConsultation',
+                                        commentaire: commentaire_input.value
+                                    },
+                                    dataType: 'json'
+                                })
+                                    .done(function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                                        console.log('Response', response); // LOG dans Console Javascript
+                                        if (response.finished == "true") {
+                                            window.location = "./espace-employe.html";
+                                        } else {
+                                            alert("Erreur lors de terminerConsultation");
+                                        }
+                                    })
+                                    .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                        console.log('Error', error); // LOG dans Console Javascript
+                                        alert("Erreur lors de l'appel AJAX");
+                                    })
+                                    .always(function () { // Fonction toujours appelée
+
+                                    });
+
+                            });
+
+
+                        }
+                    })
+                    .fail(function (error) { })
+            }
+        })
+
+        $.ajax({
+            url: './ActionServlet',
+            method: 'GET',
+            data: {
+                todo: 'recupererUtilisateurConnecte',
+            },
+            dataType: 'json'
+        })
+            .done(function (response) {
+
                 console.log(response);
-                if(response == null ||
-                 (response != null && response.connected == false))
-                {
+                if (response == null ||
+                    (response != null && response.connected == false)) {
                     console.log("first" + response)
                     redirectionIndex()
                 }
-                else if(response != null && response.connected == true)
-                {
-                    if(response.role != "Employe")
-                    {
+                else if (response != null && response.connected == true) {
+                    if (response.role != "Employe") {
                         console.log("second" + response)
                         redirectionIndex()
                     }
-                    else
-                    {
+                    else {
                         let employe = response.user
                         let lastConsultation = null
-                        
+
                         titleName.innerHTML = employe.prenom
 
                         console.log("finding last consultation...")
-                        
-                        if(!employe.disponible)
-                        {
-                            for(let consultation of employe.consultations)
-                            {
+
+                        if (!employe.disponible) {
+                            for (let consultation of employe.consultations) {
                                 console.log(consultation)
-                                if(consultation.date_fin == null)
-                                {
+                                if (consultation.date_fin == null) {
                                     console.log("found !")
                                     lastConsultation = consultation
                                     break;
                                 }
                             }
                         }
-                                                
-                        // recherche consultation
 
-                        if(lastConsultation != null)
-                        {
-                            ID_CONSULTATION = lastConsultation.id 
+                        // recherche consultation
+                        if (lastConsultation != null) {
+                            ID_CONSULTATION = lastConsultation.id
 
                             console.log("getting full consultation...")
                             $.ajax({
@@ -520,83 +565,173 @@
                                 },
                                 dataType: 'json'
                             })
-                            .done( function (response) {
-                                let consultation = response.consultation
-                                console.log("finding client information...")
-                                
-                                // Enlever le bouton commencer si la consultation est déjà commencée
-                                lastConsultation = consultation
-                                if(consultation.date_debut != null)
-                                {
-                                    hideStartButton()
-                                }
+                                .done(function (response) {
+                                    let consultation = response.consultation
+                                    console.log("finding client information...")
 
-                                // Récupération info client
-                                $.ajax({
-                                    url: './ActionServlet',
-                                    method: 'GET',
-                                    data: {
-                                        todo: 'recupererClient',
-                                        id: consultation.client_id
-                                    },
-                                    dataType: 'json'
-                                })
-                                .done( function (response) {
+                                    // Enlever le bouton commencer si la consultation est déjà commencée
+                                    lastConsultation = consultation
+                                    if (consultation.date_debut != null) {
+                                        hideStartButton()
+                                    }
+
+                                    // Récupération info client
+                                    $.ajax({
+                                        url: './ActionServlet',
+                                        method: 'GET',
+                                        data: {
+                                            todo: 'recupererClient',
+                                            id: consultation.client_id
+                                        },
+                                        dataType: 'json'
+                                    })
+                                        .done(function (response) {
+                                            console.log(response)
+                                            if (response.status)
+                                                populateClientInfos(response.client)
+                                            populateConsultationsHistory(response.client.consultations)
+
+                                        })
+                                        .fail(function (error) {
+                                            console.log('Error', error); // LOG dans Console Javascript
+                                            alert("Erreur lors de l'appel AJAX");
+                                        })
+
+                                    console.log("finding medium information...")
+
+                                    // Récupération info medium
+                                    $.ajax({
+                                        url: './ActionServlet',
+                                        method: 'GET',
+                                        data: {
+                                            todo: 'recupererMedium',
+                                            id: consultation.medium_id
+                                        },
+                                        dataType: 'json'
+                                    })
+                                        .done(function (response) {
+                                            console.log(response)
+                                            if (response.status)
+                                                populateMediumInfos(response.medium)
+                                        })
+                                        .fail(function (error) {
+                                            console.log('Error', error); // LOG dans Console Javascript
+                                            alert("Erreur lors de l'appel AJAX");
+                                        })
+
                                     console.log(response)
-                                    if(response.status)
-                                        populateClientInfos(response.client)
-                                        populateConsultationsHistory(response.client.consultations)
-                                    
                                 })
-                                .fail(function(error) {
-                                    console.log('Error',error); // LOG dans Console Javascript
+                                .fail(function (error) {
+                                    console.log('Error', error); // LOG dans Console Javascript
                                     alert("Erreur lors de l'appel AJAX");
                                 })
-
-                                console.log("finding medium information...")
-
-                                // Récupération info medium
-                                $.ajax({
-                                    url: './ActionServlet',
-                                    method: 'GET',
-                                    data: {
-                                        todo: 'recupererMedium',
-                                        id: consultation.medium_id
-                                    },
-                                    dataType: 'json'
-                                })
-                                .done( function (response) {
-                                    console.log(response)
-                                    if(response.status)
-                                        populateMediumInfos(response.medium)
-                                })
-                                .fail(function(error) {
-                                    console.log('Error',error); // LOG dans Console Javascript
-                                    alert("Erreur lors de l'appel AJAX");
-                                })
-
-                                console.log(response)
-                            })
-                            .fail(function(error) {
-                                console.log('Error',error); // LOG dans Console Javascript
-                                alert("Erreur lors de l'appel AJAX");
-                            })
                         }
-                        else
-                        {
+                        else {
                             hideConsultation()
                         }
-                        // recherche client
+                        // Statistiques
+
+                        $.ajax({
+                            url: './ActionServlet',
+                            method: 'GET',
+                            data: {
+                                todo: 'recupererStatistiques'
+                            },
+                            dataType: 'json'
+                        })
+                            .done(function (response) {
+                                console.log("statistiques")
+                                console.log(response)
+
+                                if(response.status)
+                                {
+                                    let lineChartData = {
+                                        labels: [],
+                                        data: []
+                                    };
+
+                                    for(let entry of response.stat_consultation_medium)
+                                    {
+                                        lineChartData.labels.push(entry.medium_denomination)
+                                        lineChartData.data.push(entry.value)
+                                    }
+
+                                    buildBarChart('container-1', lineChartData)
+                                    populateStatTopMedium(response.top_medium)
+                                }
+                                
+
+                                
+                            })
+                            .fail(function (error) { })
 
                     }
+                }
+            })
+            .fail(function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                console.log('Error', error); // LOG dans Console Javascript
+                alert("Erreur lors de l'appel AJAX");
+            })
+            
+            let navbar_buttons = document.querySelector("#navbar-buttons");
+
+            // Appel AJAX
+            $.ajax({
+                url: './ActionServlet',
+                method: 'GET',
+                data: {
+                    todo: 'menuNavigation',
+                },
+                dataType: 'json'
+            })
+            .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                console.log(response);
+                let length = response.liens.length;
+                let count = 1;
+                for (let l of response.liens) {
+
+                    let classs = "btn bg-white";
+                    if (count < length) {
+                        classs += " mr-2";
+                    }
+
+                    let element = e("a", navbar_buttons, "", classs, l.label);
+
+                    switch (l.name) {
+                        case "connect":
+                            element.href="./connexion.html";
+                            break;
+
+                        case "disconnect":
+                            //element.href="./connexion.html";
+                            break;
+
+                        case "register":
+                            element.href="./inscription.html";
+                            break;
+
+                        case "customer":
+                            element.href="./espace-client.html";
+                            break;
+
+                        case "employee":
+                            element.href="./espace-employe.html";
+                            break;
+                    }
+
+                    count++;
                 }
             })
             .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
                 console.log('Error',error); // LOG dans Console Javascript
                 alert("Erreur lors de l'appel AJAX");
             })
+            .always( function () { // Fonction toujours appelée
+
+            });
         });
         
         
+
     </script>
 </html>

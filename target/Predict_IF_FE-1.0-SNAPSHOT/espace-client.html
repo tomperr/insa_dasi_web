@@ -12,10 +12,7 @@
             <div class="navbar navbar-dark bg-dark">
                 <div class="container d-flex justify-content-between">
                     <a class="navbar-brand d-flex align-items-center" href="./index.html"><strong>PREDICT'IF</strong></a>
-                    <div class="d-flex">
-                        <a id="Connexion" href="./espace-client.html" class="btn bg-white mr-2">Espace client</a>
-                        <a id="Inscription" href="./index.html" class="btn bg-white">Déconnexion</a>
-                    </div>
+                    <div class="d-flex" id="navbar-buttons"></div>
                 </div>
             </div>
         </header>
@@ -88,6 +85,7 @@
                 parent.appendChild(element);
                 return element;
             }
+            
             $(document).ready(function(){
                 $.ajax({
                     url: './ActionServlet',
@@ -126,6 +124,63 @@
                     console.log("Error",error);
                     alert("Erreur lors de l'appel AJAX");
                 })
+            
+                let navbar_buttons = document.querySelector("#navbar-buttons");
+            
+                // Appel AJAX
+                $.ajax({
+                    url: './ActionServlet',
+                    method: 'GET',
+                    data: {
+                        todo: 'menuNavigation',
+                    },
+                    dataType: 'json'
+                })
+                .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                    console.log(response);
+                    let length = response.liens.length;
+                    let count = 1;
+                    for (let l of response.liens) {
+
+                        let classs = "btn bg-white";
+                        if (count < length) {
+                            classs += " mr-2";
+                        }
+
+                        let elt = element("a", navbar_buttons, "", classs, l.label);
+
+                        switch (l.name) {
+                            case "connect":
+                                elt.href="./connexion.html";
+                                break;
+
+                            case "disconnect":
+                                //element.href="./connexion.html";
+                                break;
+
+                            case "register":
+                                elt.href="./inscription.html";
+                                break;
+
+                            case "customer":
+                                elt.href="./espace-client.html";
+                                break;
+
+                            case "employee":
+                                elt.href="./espace-employe.html";
+                                break;
+                        }
+
+                        count++;
+                    }
+                })
+                .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                    console.log('Error',error); // LOG dans Console Javascript
+                    alert("Erreur lors de l'appel AJAX");
+                })
+                .always( function () { // Fonction toujours appelée
+
+                });
             });
         </script>    
     </body>
