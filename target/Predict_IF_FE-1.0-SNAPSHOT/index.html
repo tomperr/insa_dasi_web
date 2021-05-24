@@ -30,7 +30,7 @@ Vous pouvez dès à présent faire appel à nos services, nous ferons tout le n�
                     <hr/>
                     <p>Débutez votre consultation dès maintenant.</p>
                     
-                    <a href="#" class="btn bg-white border border-primary">Bénéficier de nos services</a>
+                    <a href="#" class="btn bg-white border border-primary" id="get-services">Bénéficier de nos services</a>
                 </div>
             </div>
             <div class="container py-4">
@@ -130,7 +130,20 @@ Vous pouvez dès à présent faire appel à nos services, nous ferons tout le n�
                     dataType: 'json'
                 })
                 .done( function (response) {
-                    
+                   
+                   let service_button = document.querySelector("#get-services");
+                   
+                   if (response.connected) {
+                       if (response.role == "Employe") {
+                           service_button.href = "./espace-employe.html";
+                       } else {
+                           service_button.href = "./espace-client.html";
+                       }
+                   } else {
+                       service_button.href = "./connexion.html";
+                   }
+                   
+                   
                    console.log(response);
                 })
                 .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
