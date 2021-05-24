@@ -1,10 +1,13 @@
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\TerminerConsultationAction.java
+D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\RecupererStatistiquesAction.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\RecupererEmployeAction.java
+D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\MenuNavigationSerialisation.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\Action.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\ListeMediumAction.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\RecupererMediumAction.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\RecupererMediumSerialisation.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\RecupererEmployeSerialisation.java
+D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\MenuNavigationAction.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\RecupererConsultationAction.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\RecupererUtilisateurConnecteSerialisation.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\DemanderConsultationSerialisation.java
@@ -14,6 +17,7 @@ D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Actio
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\RecupererClientSerialisation.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\ListeMediumSerialisation.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\DemanderConsultationAction.java
+D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\RecupererStatistiquesSerialisation.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\GenererPredictionsAction.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\GenererPredictionsSerialisation.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\Serialisation.java

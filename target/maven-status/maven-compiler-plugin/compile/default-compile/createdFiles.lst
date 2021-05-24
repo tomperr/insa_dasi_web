@@ -2,6 +2,7 @@ Action\ConnexionAction.class
 Serialisation\InscriptionClientSerialisation.class
 Serialisation\GenererPredictionsSerialisation.class
 Serialisation\RecupererEmployeSerialisation.class
+Serialisation\DeconnexionSerialisation.class
 Serialisation\TerminerConsultationSerialisation.class
 Action\GenererPredictionsAction.class
 Serialisation\RecupererMediumSerialisation.class
@@ -25,6 +26,7 @@ Action\RecupererStatistiquesAction.class
 Action\ActionServlet.class
 Action\RecupererConsultationAction.class
 Action\DemanderConsultationAction.class
+Action\DeconnexionAction.class
 Action\RecupererEmployeAction.class
 Serialisation\ListeMediumSerialisation.class
 Action\Action.class

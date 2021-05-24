@@ -84,7 +84,14 @@
                     .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
                         console.log('Response',response); // LOG dans Console Javascript
                         if (response.connexion) {
-                            window.location = "./confirmationInscription.html";
+                            // changer redirection
+                            if (response.role == "Employe") {
+                                window.location = "./espace-employe.html";
+                            } else if (response.role == "Client") {
+                                window.location = "./espace-client.html";
+                            } else {
+                                window.location = "./index.html";
+                            }
                         }
                         else {
                             $('#notification').html("Le login ou Mot de passe fourni est incorrecte,<br/> Veuillez réessayez svp "); // Message pour le paragraphe de notification

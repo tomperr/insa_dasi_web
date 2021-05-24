@@ -8,6 +8,7 @@ package Serialisation;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import dasi.dasi_projet.metier.modele.Employe;
 import dasi.dasi_projet.metier.modele.Client;
 import dasi.dasi_projet.metier.modele.Utilisateur;
 import java.io.IOException;
@@ -30,6 +31,11 @@ public class ConnexionSerialisation extends Serialisation{
             Utilisateur utilisateur= (Utilisateur) request.getAttribute("utilisateur");
             if ( utilisateur != null ){
                container.addProperty("connexion", true);
+               if (utilisateur instanceof Employe) {
+                   container.addProperty("role", "Employe");
+               } else {
+                   container.addProperty("role", "Client");
+               }
             }
             else{
                 container.addProperty("connexion", false);

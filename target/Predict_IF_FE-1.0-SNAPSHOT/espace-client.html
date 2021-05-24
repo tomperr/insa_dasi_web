@@ -86,6 +86,15 @@
                 return element;
             }
             
+            function e(tag, parent, id, classs, value) {
+                let element = document.createElement(tag);
+                element.className = classs;
+                element.id = id;
+                element.innerHTML = value;
+                parent.appendChild(element);
+                return element;
+            }
+            
             $(document).ready(function(){
                 $.ajax({
                     url: './ActionServlet',
@@ -147,7 +156,7 @@
                             classs += " mr-2";
                         }
 
-                        let elt = element("a", navbar_buttons, "", classs, l.label);
+                        let elt = e("a", navbar_buttons, "", classs, l.label);
 
                         switch (l.name) {
                             case "connect":
