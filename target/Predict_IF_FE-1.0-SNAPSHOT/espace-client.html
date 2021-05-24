@@ -44,7 +44,7 @@
 
             <div class="row bg-dark p-5">
                 <div class="col text-center">
-                    <a href="./selection-mediums.html" class="btn btn-lg btn-light">Demander une consultation</a>
+                    <button class="btn btn-lg btn-light" id="DemanderConsultation">Demander une consultation</button>
                 </div>
             </div>
 
@@ -108,9 +108,11 @@
                     console.log(response);
                     if(response!=null && response.connected == false){
                         console.log("vous devez vous connecter pour rester ici");
+                        window.location = "./index.html";
                     }else if(response!=null && response.connected == true){
                         if(response.role != "Client"){
                             console.log("vous n'êtes pas un client");
+                            window.location = "./index.html";
                         }else{
                             $('#theUserName').html("<b>Bonjour</b> "+response.user.prenom+" "+response.user.nom);
                             $('#SigneChinois').html("Signe chinois <br/><span><b>"+response.user.profil_astral.signe_chinois+"</b></span>");
@@ -189,6 +191,33 @@
                 })
                 .always( function () { // Fonction toujours appelée
 
+                });
+                $('#DemanderConsultation').on( 'click', function () {
+                    $.ajax({
+                    url: './ActionServlet',
+                    meyhod: 'GET',
+                    data : {
+                        todo: 'recupererUtilisateurConnecte'
+                    },
+                    dataType : 'json'
+                    })
+                    .done(function (response){
+                        if(response.user.consultations.length >=1){
+                            if(response.user.consultations[response.user.consultations.length -1].date_debut==null){
+                                alert("Vous avez une consultation en attente");
+                            }else if(response.user.consultations[response.user.consultations.length -1].date_debut!=null && response.user.consultations[response.user.consultations.length -1].date_fin == null ){
+                                alert("Vous avez une consultation en cours");
+                            }else{
+                                window.location = "./selection-mediums.html";
+                            }
+                        }else{
+                            window.location = "./selection-mediums.html";
+                        }
+                    })
+                    .fail(function(error){
+                        console.log("Error",error);
+                        alert("Erreur lors de l'appel AJAX");
+                    })
                 });
             });
         </script>    
