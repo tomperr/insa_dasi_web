@@ -161,6 +161,12 @@
                         </dl>
                     </div>
                 </div>
+                
+                <div class="row mt-2">
+                    <div class="col">
+                        <div id="container-3" class="highcharts-container"></div>
+                    </div>
+                </div>
             </div>
         </div>
         </main>
@@ -345,6 +351,44 @@
             },
             series: [{ name: 'Données', data: graphData.data }]
         });
+    }
+    
+    function buildPieChart(container, data)
+    {
+        Highcharts.chart(container, {
+        chart: {
+            plotBackgroundColor: null,
+            plotBorderWidth: null,
+            plotShadow: false,
+            type: 'pie'
+        },
+        title: {
+            text: 'Répartition des clients par les employés'
+        },
+        tooltip: {
+            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+        },
+        accessibility: {
+            point: {
+                valueSuffix: '%'
+            }
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+                }
+            }
+        },
+        series: [{
+            name: 'Nom des employés',
+            colorByPoint: true,
+            data: data
+        }]
+    });
     }
 
     $(document).ready(function () {
@@ -658,6 +702,20 @@
 
                                     buildBarChart('container-1', lineChartData)
                                     populateStatTopMedium(response.top_medium)
+                                    
+                                    let pieChartData = []
+                                    for(let entry of response.repartition_client_employe)
+                                    {
+                                        let entryObj = {
+                                            name: entry.employe,
+                                            y: entry.value
+                                        }
+                                        pieChartData.push(entryObj)
+                                    }
+                                    
+                                    console.log(pieChartData)
+                                    
+                                    buildPieChart('container-3', pieChartData)
                                 }
                                 
 

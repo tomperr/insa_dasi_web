@@ -55,7 +55,7 @@
                             <h1>Historique des consultations</h1>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" id="historique-table">
                         <div class="col">
                             <table class="table table-striped">
                                 <thead>
@@ -121,13 +121,38 @@
                             $('#SigneZodiaque').html("Signe zodiaque <br/><span><b>"+response.user.profil_astral.signe_zodiaque+"</b></span>");
                             
                             
-                            for(var i=0;i<response.user.consultations.length;++i){
-                                element("tr",document.getElementById("historiqueConsultation"),response.user.consultations[i].id,"");
-                                element("td",document.getElementById(response.user.consultations[i].id),"",response.user.consultations[i].date_debut);
-                                element("td",document.getElementById(response.user.consultations[i].id),"",response.user.consultations[i].date_fin);
-                                element("td",document.getElementById(response.user.consultations[i].id),"",response.user.consultations[i].medium.denomination);
-                                element("td",document.getElementById(response.user.consultations[i].id),"",response.user.consultations[i].medium.specialite);
+                            if (response.user.consultations.length == 0) {
+                                let table = document.querySelector("#historique-table");
+                                table.innerHTML = "";
+                                e("h4", table, "", "col", "Aucune précédente consultation")
+                            } else {
+                                
+                                let active_consultation = false;
+                               
+                                for(var i=0;i<response.user.consultations.length;++i){
+                                    if (response.user.consultations[i].date_debut == null || response.user.consultations[i].date_fin == null)
+                                        active_consultation = true;
+                                    
+                                    element("tr",document.getElementById("historiqueConsultation"),response.user.consultations[i].id,"");
+                                    
+                                    let date_debut_buf = response.user.consultations[i].date_debut == null ? "En cours" : response.user.consultations[i].date_debut;
+                                    element("td",document.getElementById(response.user.consultations[i].id),"",date_debut_buf);
+                                    
+                                    let date_fin_buf = response.user.consultations[i].date_debut == null ? "En cours" : response.user.consultations[i].date_debut;
+                                    element("td",document.getElementById(response.user.consultations[i].id),"",date_fin_buf);
+                                    
+                                    element("td",document.getElementById(response.user.consultations[i].id),"",response.user.consultations[i].medium.denomination);
+                                    element("td",document.getElementById(response.user.consultations[i].id),"",response.user.consultations[i].medium.specialite);
+                                }
+                                
+                                if (active_consultation) {
+                                    let bouton_demander = document.querySelector("#DemanderConsultation");
+                                    bouton_demander.disabled = true;
+                                    bouton_demander.innerHTML = "Une consultation est déjà en attente";
+                                }
+                                
                             }
+                            
                         }
                     }
                 })
@@ -166,9 +191,9 @@
                                 break;
 
                             case "disconnect":
-                                console.log("clic sur le bouton de déconnexion"); // LOG dans Console Javascript
 
                                 elt.addEventListener('click', function() {
+                                    console.log("clic sur le bouton de déconnexion"); // LOG dans Console Javascript
                                     // Appel AJAX
                                     $.ajax({
                                         url: './ActionServlet',
@@ -179,7 +204,7 @@
                                         dataType: 'json'
                                     })
                                     .done( function () { // Fonction appelée en cas d'appel AJAX réussi
-                                        elt.href="./index.html";
+                                        window.location="./index.html";
                                     })
                                     .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
                                         console.log('Error',error); // LOG dans Console Javascript

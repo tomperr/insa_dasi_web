@@ -33,9 +33,11 @@ public class RecupererStatistiquesAction extends Action
         {
             Map<Medium,Integer> stat_consultation_medium = service.statistiquesMediumsConsultations();
             List<Medium> top_medium = service.statistiquesTopMediums();
+            Map<String, Integer> repartition = service.calculerRepartitionClientsParEmployes();
             
             request.setAttribute("stat_consultation_medium", stat_consultation_medium);
             request.setAttribute("top_medium", top_medium);
+            request.setAttribute("repartition_client_employe", repartition);
         } catch(Exception ex){
             Logger.getAnonymousLogger().log(Level.SEVERE, "Erreur !");
         }

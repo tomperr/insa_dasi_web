@@ -31,16 +31,15 @@ public class RecupererStatistiquesSerialisation extends Serialisation
         
         Map<Medium,Integer> stat_consultation_medium = (Map<Medium,Integer>)request.getAttribute("stat_consultation_medium");
         List<Medium> top_medium = (List<Medium>)request.getAttribute("top_medium");
+        Map<String, Integer> repartition_client_employe = (Map<String,Integer>)request.getAttribute("repartition_client_employe");
         
-        if(stat_consultation_medium != null && top_medium != null)
+        if(stat_consultation_medium != null && top_medium != null && repartition_client_employe != null)
         {
             container.addProperty("status", true);
             
             JsonArray stat_consultationObj = new JsonArray();
             for (Map.Entry<Medium,Integer> entry : stat_consultation_medium.entrySet())
-            {   
-                System.out.println("Key = " + entry.getKey() +
-                             ", Value = " + entry.getValue());
+            {
                 JsonObject entryObj = new JsonObject();
                 entryObj.addProperty("medium_denomination", entry.getKey().getDenomination());
                 entryObj.addProperty("value", entry.getValue());
@@ -54,8 +53,18 @@ public class RecupererStatistiquesSerialisation extends Serialisation
             {
                 top_mediumObj.add(med.getDenomination());
             }
-            
             container.add("top_medium", top_mediumObj);
+            
+            JsonArray repartitionObj = new JsonArray();
+            for (Map.Entry<String,Integer> entry : repartition_client_employe.entrySet())
+            {
+                JsonObject entryObj = new JsonObject();
+                entryObj.addProperty("employe", entry.getKey());
+                entryObj.addProperty("value", entry.getValue());
+                
+                repartitionObj.add(entryObj);
+            }
+            container.add("repartition_client_employe", repartitionObj);
         }
         else
         {

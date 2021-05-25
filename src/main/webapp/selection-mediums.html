@@ -50,11 +50,8 @@
                     </div>
 
                     <div class="row">
-                        <div class="row"><p id="Message"></p>
-                        <div class="col text-right">
-                        </div>
-                    </div>
                         <div class="col"id="container">
+                            <div class="mt-2" id="notification-container"></div>
                             <h1 class="text-center my-2">Médiums Disponibles</h1>
                         </div>
                     </div>
@@ -156,9 +153,8 @@
                                         window.location = "./confirmationConsultation.html";
                                     }
                                     else{
-                                        var Message = document.getElementById('Message');
-                                        var texte = "Le Médium choisi n'est pas disponible actuellement, Veuillez choisir un autre SVP";
-                                        Message.innerHTML = texte;
+                                        let notification_container = document.querySelector("#notification-container");
+                                        e("div", notification_container, "", "alert alert-danger", "Le médium sélectionné est indisponible");
                                     }
                                 })
                                 .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX

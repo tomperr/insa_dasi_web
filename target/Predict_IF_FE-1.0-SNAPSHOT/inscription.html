@@ -105,6 +105,11 @@
                 parent.appendChild(element);
                 return element;
             }
+            
+            function validateEmail(email) {
+                const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(email);
+            }
         
             $(document).ready( function () {
                 $('#Valider').on( 'click', function () { // Fonction appelée lors du clic sur le bouton
@@ -117,44 +122,127 @@
                     var mail = $('#inputMail').val();
                     var adresse = $('#inputAdresse').val();
                     var telephone = $('#inputTelephone').val();
-                    var  date= $('#inputDate').val();
-                    var  genre= $('#inputGenre').val();
-                    var  mdp= $('#inputMotDePasse').val();
+                    var date= $('#inputDate').val();
+                    var genre= $('#inputGenre').val();
+                    var mdp= $('#inputMotDePasse').val();
                     
-                    // Appel AJAX
-                    $.ajax({
-                        url: './ActionServlet',
-                        method: 'POST',
-                        data: {
-                            todo: 'inscription',
-                            adresse: adresse,
-                            telephone: telephone,
-                            date :date,
-                            mail: mail,
-                            prenom :prenom,
-                            nom: nom,
-                            genre : genre,
-                            motDePasse : mdp
-                        },
-                        dataType: 'json'
-                    })
-                    .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
-                        console.log('Response',response); // LOG dans Console Javascript
-                        if (response.inscription) {
-                            window.location = "./confirmationInscription.html";
-                        }
-                        else {
-                            console.log('date : ' + date);
-                            $('#notification').html("Erreur d'inscription"); // Message pour le paragraphe de notification
-                        }
-                    })
-                    .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
-                        console.log('Error',error); // LOG dans Console Javascript
-                        alert("Erreur lors de l'appel AJAX");
-                    })
-                    .always( function () { // Fonction toujours appelée
-                        
-                    });
+                    let valid = true;
+                    
+                    // removes validation classes
+                    
+                    let field_nom = $('#inputNom');
+                    let field_prenom = $('#inputPrenom');
+                    let field_mail = $('#inputMail');
+                    let field_adresse = $('#inputAdresse');
+                    let field_telephone = $('#inputTelephone');
+                    let field_date= $('#inputDate');
+                    let field_genre= $('#inputGenre');
+                    let field_mdp= $('#inputMotDePasse');
+                    
+                    field_nom.removeClass('is-invalid is-valid');
+                    field_prenom.removeClass('is-invalid is-valid');
+                    field_mail.removeClass('is-invalid is-valid');
+                    field_adresse.removeClass('is-invalid is-valid');
+                    field_telephone.removeClass('is-invalid is-valid');
+                    field_date.removeClass('is-invalid is-valid');
+                    field_genre.removeClass('is-invalid is-valid');
+                    field_mdp.removeClass('is-invalid is-valid');
+                    
+                    
+                    if (nom == undefined || nom == "") {
+                        valid = false;
+                        field_nom.addClass("is-invalid");
+                    } else {
+                        field_nom.addClass("is-valid");
+                    }
+                    
+                    if (prenom == undefined || prenom == "") {
+                        valid = false;
+                        field_prenom.addClass("is-invalid");
+                    } else {
+                        field_prenom.addClass("is-valid");
+                    }
+                    
+                    if (mail == undefined || mail == "" || !validateEmail(mail)) {
+                        valid = false;
+                        field_mail.addClass("is-invalid");
+                    } else {
+                        field_mail.addClass("is-valid");
+                    }
+                    
+                    if (adresse == undefined || adresse == "") {
+                        valid = false;
+                        field_adresse.addClass("is-invalid");
+                    } else {
+                        field_adresse.addClass("is-valid");
+                    }
+                    
+                    if (telephone == undefined || telephone == "" || telephone.length != 10) {
+                        valid = false;
+                        field_telephone.addClass("is-invalid");
+                    } else {
+                        field_telephone.addClass("is-valid");
+                    }
+                    
+                    if (date == undefined || date == "") {
+                        valid = false;
+                        field_date.addClass("is-invalid");
+                    } else {
+                        field_date.addClass("is-valid");
+                    }
+                    
+                    if (genre == undefined || genre == "") {
+                        valid = false;
+                        field_genre.addClass("is-invalid");
+                    } else {
+                        field_genre.addClass("is-valid");
+                    }
+                    
+                    if (mdp == undefined || mdp == "") {
+                        valid = false;
+                        field_mdp.addClass("is-invalid");
+                    } else {
+                        field_mdp.addClass("is-valid");
+                    }
+                    
+                    if (valid) {
+                        console.log("lancer ajax")
+                        // Appel AJAX
+                        $.ajax({
+                            url: './ActionServlet',
+                            method: 'POST',
+                            data: {
+                                todo: 'inscription',
+                                adresse: adresse,
+                                telephone: telephone,
+                                date :date,
+                                mail: mail,
+                                prenom :prenom,
+                                nom: nom,
+                                genre : genre,
+                                motDePasse : mdp
+                            },
+                            dataType: 'json'
+                        })
+                        .done( function (response) { // Fonction appelée en cas d'appel AJAX réussi
+                            console.log('Response',response); // LOG dans Console Javascript
+                            if (response.inscription) {
+                                window.location = "./confirmationInscription.html";
+                            }
+                            else {
+                                console.log('date : ' + date);
+                                $('#notification').html("Erreur d'inscription"); // Message pour le paragraphe de notification
+                            }
+                        })
+                        .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                            console.log('Error',error); // LOG dans Console Javascript
+                            alert("Erreur lors de l'appel AJAX");
+                        })
+                        .always( function () { // Fonction toujours appelée
+
+                        });
+                    }                 
+                    
                 });
                 $('#Annuler').on( 'click', function () { 
                     window.location = "./index.html";
