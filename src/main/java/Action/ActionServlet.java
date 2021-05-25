@@ -19,6 +19,7 @@ import Serialisation.RecupererUtilisateurConnecteSerialisation;
 import Serialisation.Serialisation;
 import Serialisation.TerminerConsultationSerialisation;
 import Serialisation.RecupererStatistiquesSerialisation;
+import Serialisation.DeconnexionSerialisation;
 
 import dasi.dasi_projet.dao.JpaUtil;
 import dasi.dasi_projet.metier.service.Service;
@@ -129,6 +130,12 @@ public class ActionServlet extends HttpServlet {
             case "menuNavigation": {
                 action = new MenuNavigationAction(service);
                 serialisation = new MenuNavigationSerialisation();
+                break;
+            }
+            
+            case "deconnexion": {
+                action = new DeconnexionAction(service);
+                serialisation = new DeconnexionSerialisation();
                 break;
             }
                         

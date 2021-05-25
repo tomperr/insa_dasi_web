@@ -29,9 +29,6 @@ public class DeconnexionSerialisation extends Serialisation{
             JsonObject container = new JsonObject();
             container.addProperty("connexion", false);
             
-            // Redirection vers la page d'accueil
-            response.sendRedirect("index.html");
-            
             // serialisation et écriture sur le flux de sortie de la reponse
             response.setContentType("application/json;charset=UTF-8");
             PrintWriter out = response.getWriter();

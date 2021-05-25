@@ -5,6 +5,7 @@ D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Seria
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\Action.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\ListeMediumAction.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\RecupererMediumAction.java
+D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\DeconnexionSerialisation.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\RecupererMediumSerialisation.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\RecupererEmployeSerialisation.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\MenuNavigationAction.java
@@ -25,6 +26,7 @@ D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Actio
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\CommencerConsultationAction.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\RecupererUtilisateurConnecteAction.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\CommencerConsultationSerialisation.java
+D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Action\DeconnexionAction.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\TerminerConsultationSerialisation.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\InscriptionClientSerialisation.java
 D:\Home\Documents\INSA\3IF\S2\IF-3-DASI\Projet\Predict_IF_FE\src\main\java\Serialisation\ConnexionSerialisation.java

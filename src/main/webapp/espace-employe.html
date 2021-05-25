@@ -703,7 +703,30 @@
                             break;
 
                         case "disconnect":
-                            //element.href="./connexion.html";
+                            console.log("clic sur le bouton de déconnexion"); // LOG dans Console Javascript
+
+                            element.addEventListener('click', function() {
+                                // Appel AJAX
+                                $.ajax({
+                                    url: './ActionServlet',
+                                    method: 'POST',
+                                    data: {
+                                        todo: 'deconnexion',
+                                    },
+                                    dataType: 'json'
+                                })
+                                .done( function () { // Fonction appelée en cas d'appel AJAX réussi
+                                    window.location="./index.html";
+                                })
+                                .fail( function (error) { // Fonction appelée en cas d'erreur lors de l'appel AJAX
+                                    console.log('Error',error); // LOG dans Console Javascript
+                                    alert("Erreur lors de l'appel AJAX pour la déconnexion");
+                                })
+                                .always( function () { // Fonction toujours appelée
+
+                                });
+                            });
+
                             break;
 
                         case "register":
