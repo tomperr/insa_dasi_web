@@ -19,7 +19,6 @@
             <groupId>dasi</groupId>
             <artifactId>DASI_Projet</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
