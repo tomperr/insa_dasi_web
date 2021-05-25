@@ -6,6 +6,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <style>
+            .medium {
+                box-shadow: 0px;
+            }
+            
+            .medium:hover {
+                cursor:pointer;
+                box-shadow: 2px;
+                transition: 0.5s all ease;
+            }
+        </style>
     </head>
     <body class="m-0 p-0">
         <header>
@@ -128,7 +139,7 @@
                         medium.addEventListener('click',function(){
                             //console.log('Test',mediums[i].dataset.id);
                             mediumSelectionne = medium.dataset.id;
-                            if (window.confirm("Etes vous sur du choix du médium ? "+ mediumSelectionne)) {
+                            if (window.confirm("Etes vous sur du choix du médium ?")) {
                                 console.log("medium id : " + mediumSelectionne);
                                 
                                 $.ajax({
